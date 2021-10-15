@@ -1,0 +1,98 @@
+.main {
+  border: solid;
+  margin: 50px 370px 50px;
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+                      "notes"
+                      "createNote"
+                      ;
+  height: 80vh;
+  position: relative;
+}
+.notes, .createNote {
+  border: dashed;
+  margin: 2px;
+  
+}
+.note, .menu {
+  border: 1px solid;
+  border-color: rgb(12, 12, 138);
+  margin: 2px;
+}
+.notes {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  grid-area: notes;
+}
+.note {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 14fr 1fr;
+  grid-template-areas: 
+                      "nText del"
+                      "nText edit"
+                      "nText ready"                      
+                      ;
+
+}
+.notesText {
+  grid-area: nText;
+  border-right: 3px solid;
+  background-color: aquamarine;
+  margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  
+}
+.createNote {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 10fr 1fr;
+  grid-area: createNote;
+  bottom: 0;
+  width: auto;
+}
+.del {
+  grid-area: del;
+}
+.edit {
+  grid-area: edit;
+}
+.ready {
+  grid-area: ready;
+
+}
+.icon {
+  width: 20px;
+}
+
+.del, .edit, .ready, .add {
+  margin: auto;
+  cursor: pointer;
+}
+.newNoteArea {
+  margin: 3px;
+  width: 100%;
+  outline: none;
+  resize: none;
+}
+.createNote #edit {
+  display: none;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.blacklight {
+  background:#fcfcfc;
+  -moz-box-shadow:0 0 10px #000;
+  -webkit-box-shadow:0 0 10px #000;
+  box-shadow:0 0 10px #000;
+}
+
+
