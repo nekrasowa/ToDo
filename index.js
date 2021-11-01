@@ -76,6 +76,7 @@ function onPageLoaded () {
     newNote.focus();
   }
 
+  // TODO: need to improve
   function editNote() {
     const elem = document.getElementById(editedNoteId);
     const editNote = elem.querySelector('.notesText');
