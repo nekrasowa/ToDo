@@ -32,13 +32,14 @@
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 14fr 1fr;
   grid-template-areas: 
-                      "nText del"
+                      "hedNote del"
                       "nText edit"
                       "nText ready"                      
                       ;
 
 }
 .notesText {
+  display: flex;
   grid-area: nText;
   border-right: 3px solid;
   background-color: aquamarine;
@@ -46,8 +47,20 @@
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
-  
+  white-space: pre;
 }
+
+.headingNote {
+  display: flex;
+  grid-area: hedNote;
+  border-right: 3px solid;
+  background-color: rgb(60, 161, 228);
+  margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
 .createNote {
   display: grid;
   grid-template-rows: 1fr;
@@ -74,12 +87,14 @@
   margin: auto;
   cursor: pointer;
 }
-.newNoteArea {
+.newNoteArea, .headingInput {
   margin: 3px;
   width: 100%;
   outline: none;
   resize: none;
+  white-space: pre;
 }
+
 .createNote #edit {
   display: none;
 }
@@ -88,11 +103,13 @@
   flex-direction: column;
 }
 
-.blacklight {
-  background:#fcfcfc;
-  -moz-box-shadow:0 0 10px #000;
-  -webkit-box-shadow:0 0 10px #000;
-  box-shadow:0 0 10px #000;
+.blacklighGreen:hover {
+  box-shadow:0 0 7px 1px rgb(17, 155, 5);
 }
-
+.blacklighYelow:hover {
+  box-shadow:0 0 5px 1px rgb(1, 107, 206);
+}
+.blacklighRed:hover {
+  box-shadow:0 0 5px 1px rgb(177, 2, 2);
+}
 
