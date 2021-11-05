@@ -119,6 +119,12 @@ function onPageLoaded () {
     }
   });
 
+  headingNote.addEventListener('keyup', function(event) {
+    if (event.key == 'Enter' && event.shiftKey) {
+    createNote();
+    }
+  });
+
   const edit = document.getElementById('edit');
   edit.onclick = editNote;
 }

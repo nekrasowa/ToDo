@@ -1,0 +1,15 @@
+.main {
+  border: solid;
+  margin: 50px 370px 50px;
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+                      "notes"
+                      "createNote"
+                      ;
+  height: 80vh;
+  position: relative;
+}
+
+

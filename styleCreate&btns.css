@@ -1,0 +1,53 @@
+.createNote {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 10fr 1fr;
+  grid-area: createNote;
+  bottom: 0;
+  width: auto;
+  border: dashed;
+  margin: 2px;
+}
+.del {
+  grid-area: del;
+}
+.edit {
+  grid-area: edit;
+}
+.ready {
+  grid-area: ready;
+
+}
+.icon {
+  width: 20px;
+}
+
+.del, .edit, .ready, .add {
+  margin: auto;
+  cursor: pointer;
+}
+.newNoteArea, .headingInput {
+  margin: 3px;
+  width: 100%;
+  outline: none;
+  resize: none;
+  white-space: pre;
+}
+
+.createNote #edit {
+  display: none;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.blacklighGreen:hover {
+  box-shadow:0 0 7px 1px rgb(17, 155, 5);
+}
+.blacklighYelow:hover {
+  box-shadow:0 0 5px 1px rgb(1, 107, 206);
+}
+.blacklighRed:hover {
+  box-shadow:0 0 5px 1px rgb(177, 2, 2);
+}
