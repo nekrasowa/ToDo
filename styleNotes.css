@@ -10,7 +10,7 @@
 
 .note {
   border: 1px solid;
-  border-color: rgb(12, 12, 138);
+  border-color: rgb(58, 2, 16);
   margin: 2px;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
@@ -24,13 +24,13 @@
 
 .notesText {
   grid-area: nText;
-  background-color: #818E7F;
-  white-space: pre;
+  background-color: rgb(127, 139, 165);
+  white-space: preж
 }
 
 .headingNote {
   grid-area: hedNote;
-  background-color: #918F82;
+  background-color: rgb(131, 130, 133);
 }
 .notesText, .headingNote {
   display: flex;

@@ -41,7 +41,13 @@
   outline: none;
   resize: none;
   white-space: pre;
-
+}
+.headingInput {
+  border: none;
+  background-color: rgb(131, 130, 133);
+}
+.newNoteArea {
+  background-color: rgb(127, 139, 165);
 }
 .createNote #editArea {
   display: none;
