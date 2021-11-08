@@ -1,12 +1,18 @@
 .createNote {
   display: grid;
+  grid-area: createNote;
   grid-template-rows: 1fr;
   grid-template-columns: 10fr 1fr;
-  grid-area: createNote;
+  grid-template-areas: 
+                      "written addd"
+                      ;
   bottom: 0;
   width: auto;
   border: dashed;
   margin: 2px;
+}
+.written {
+  grid-area: written;
 }
 .del {
   grid-area: del;
@@ -16,10 +22,13 @@
 }
 .ready {
   grid-area: ready;
+}
+.add {
+  grid-area: addd;
 
 }
 .icon {
-  width: 20px;
+  width: 50px;
 }
 
 .del, .edit, .ready, .add {
@@ -28,13 +37,13 @@
 }
 .newNoteArea, .headingInput {
   margin: 3px;
-  width: 100%;
+  width: 90%;
   outline: none;
   resize: none;
   white-space: pre;
-}
 
-.createNote #edit {
+}
+.createNote #editArea {
   display: none;
 }
 .buttons {
@@ -43,11 +52,11 @@
 }
 
 .blacklighGreen:hover {
-  box-shadow:0 0 7px 1px rgb(17, 155, 5);
+  box-shadow:0 0 7px 1px #b7ffa2;
 }
 .blacklighYelow:hover {
-  box-shadow:0 0 5px 1px rgb(1, 107, 206);
+  box-shadow:0 0 5px 1px #fff891;
 }
 .blacklighRed:hover {
-  box-shadow:0 0 5px 1px rgb(177, 2, 2);
+  box-shadow:0 0 5px 1px #ffa7a7;
 }

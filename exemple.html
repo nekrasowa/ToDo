@@ -1,0 +1,30 @@
+
+<div id="addArea"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" class="icon" ><defs><style>.cls-1{fill:#111}.cls-2{fill:#750303}</style></defs><title>Add</title><g id="add"><path class="cls-1" d="M22.5 2.5v20h-20A2.5 2.5 0 0 0 0 25a2.5 2.5 0 0 0 2.5 2.5h20v20A2.5 2.5 0 0 0 25 50a2.5 2.5 0 0 0 2.5-2.5v-45A2.5 2.5 0 0 0 25 0a2.5 2.5 0 0 0-2.5 2.5z"/><rect class="cls-2" x="31" y="22.5" width="19" height="5" rx="2.5" ry="2.5"/></g></svg></div>
+<svg xmlns="http://www.w3.org/2000/svg" width="39" height="50" viewBox="0 0 39 50"><defs><style>.cls_1{fill:#111}.cls_2{fill:#750303}</style></defs><title>Del</title><g id="del"><path class="cls_1" d="M22.25 0h-5.5A2.75 2.75 0 0 0 14 2.75V5H2.5a2.5 2.5 0 0 0 0 5H31v33.25A1.76 1.76 0 0 1 29.25 45H9.75A1.76 1.76 0 0 1 8 43.25V17.5a2.5 2.5 0 1 0-5 0v25.75A6.75 6.75 0 0 0 9.75 50h19.5A6.75 6.75 0 0 0 36 43.25V10h.5a2.5 2.5 0 0 0 0-5H25V2.75A2.75 2.75 0 0 0 22.25 0z"/><path class="cls_2" d="M15.5 15a2.5 2.5 0 0 0-2.5 2.5v21a2.5 2.5 0 0 0 5 0v-21a2.5 2.5 0 0 0-2.5-2.5zM23.5 15a2.5 2.5 0 0 0-2.5 2.5v21a2.5 2.5 0 0 0 5 0v-21a2.5 2.5 0 0 0-2.5-2.5z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="35.58" height="48.99" viewBox="0 0 35.58 48.99"><defs><style>.cls_1{fill:#111}.cls_2{fill:#750303}</style></defs><title>Write</title><g id="Write"><path class="cls_1" d="M34.5 7L26.35.6a2.81 2.81 0 0 0-4 .47l-18.9 24A2.93 2.93 0 0 0 3 26.2L.23 38.07a2.79 2.79 0 0 0 1 2.84 2.75 2.75 0 0 0 3 .3l10.9-5.45a2.86 2.86 0 0 0 .95-.78L35 11a2.81 2.81 0 0 0-.5-4zm-22 24.49l-6.3 3.15 1.54-6.84 11-14.06 4.72 3.71zm14.15-18l-4.76-3.68L25 5.88l4.71 3.71z"/>
+  
+  <rect class="cls_2" y="43.99" width="35" height="5" rx="2.5" ry="2.5"/></g></svg>
+
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="49.82" height="48" viewBox="0 0 49.82 48"><defs><style>.cls_1{fill:#111}.cls_2{fill:#750303}</style></defs><title>Like</title><g id="Like"><path class="cls_1" d="M42.84 16H37c4-16-7-16-7-16h-2.77a4.61 4.61 0 0 0-4.58 5.19l.14 1.15a4.7 4.7 0 0 1-.67 3.08l-3.34 4.81a2.5 2.5 0 0 0 .82 3.44 2.49 2.49 0 0 0 3.4-.82l4.22-6.23A5.06 5.06 0 0 0 28 8a4.3 4.3 0 0 0 0-.62l-.14-1.11A1.13 1.13 0 0 1 28.94 5H30a3.17 3.17 0 0 1 2 1.06c.54.69 1.62 2.91.17 8.73L30.6 21h11.83a2.28 2.28 0 0 1 2.2 2.9l-4 14.42A2.3 2.3 0 0 1 38.45 40H16.66A2.62 2.62 0 0 0 14 42.65 2.5 2.5 0 0 0 16.5 45h22.19a7 7 0 0 0 6.72-5.12l4.16-15.05A7 7 0 0 0 42.84 16z"/><path class="cls_2" d="M14.81 19H3.19A3.19 3.19 0 0 0 0 22.19v22.62A3.19 3.19 0 0 0 3.19 48h11.62A3.19 3.19 0 0 0 18 44.81V22.19A3.19 3.19 0 0 0 14.81 19zM13 41.88A1.12 1.12 0 0 1 11.88 43H6.12A1.12 1.12 0 0 1 5 41.88V25.12A1.12 1.12 0 0 1 6.12 24h5.76A1.12 1.12 0 0 1 13 25.12z"/></g></g></svg>
+
+
+const xmlns = "http://www.w3.org/2000/svg";
+const boxWidth = 64;
+const boxHeight = 64;
+
+const svg = document.createElementNS(xmlns, "svg");
+svg.setAttributeNS(null, "viewBox", "0 0 " + boxWidth / 2 + " " + boxHeight / 2);
+svg.setAttributeNS(null, "width", boxWidth);
+svg.setAttributeNS(null, "height", boxHeight);
+
+const circle = document.createElementNS(xmlns, "circle");
+circle.setAttributeNS(null, 'cx', '50%');
+circle.setAttributeNS(null, 'cy', '50%');
+circle.setAttributeNS(null, 'r', '15');
+circle.setAttributeNS(null, 'stroke-width', '1px');
+circle.setAttributeNS(null, 'stroke', 'red');
+
+svg.append(circle)
+
+document.body.append(svg);

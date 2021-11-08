@@ -1,3 +1,13 @@
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  grid-area: notes;
+  border: dashed;
+  margin: 2px;
+}
+
 .note {
   border: 1px solid;
   border-color: rgb(12, 12, 138);
@@ -10,36 +20,26 @@
                       "nText edit"
                       "nText ready"                      
                       ;
-
-}
-.notes {
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  grid-area: notes;
-  border: dashed;
-  margin: 2px;
 }
 
 .notesText {
-  display: flex;
   grid-area: nText;
-  border-right: 3px solid;
-  background-color: aquamarine;
-  margin-block-start: 0em;
-    margin-block-end: 0em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+  background-color: #818E7F;
   white-space: pre;
 }
 
 .headingNote {
-  display: flex;
   grid-area: hedNote;
+  background-color: #918F82;
+}
+.notesText, .headingNote {
+  display: flex;
   border-right: 3px solid;
-  background-color: rgb(60, 161, 228);
   margin-block-start: 0em;
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
+  padding: 5px;
+
 }
+
