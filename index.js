@@ -13,8 +13,6 @@ function onPageLoaded () {
     }
   ]
 
-
-
   const newNote = document.querySelector('.newNoteArea');
   const headingNote = document.querySelector('.headingInput');
   const notes = document.querySelector('.notes');
