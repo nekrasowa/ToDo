@@ -1,10 +1,10 @@
-
 .notes {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   grid-area: notes;
-  border: dashed;
+  border-bottom: medium solid;
+  padding: 1%;
   margin: 2px;
 }
 
@@ -25,7 +25,7 @@
 .notesText {
   grid-area: nText;
   background-color: rgb(127, 139, 165);
-  white-space: preж
+  white-space: pre;
 }
 
 .headingNote {

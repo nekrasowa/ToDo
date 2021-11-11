@@ -8,8 +8,8 @@
                       ;
   bottom: 0;
   width: auto;
-  border: dashed;
   margin: 2px;
+  padding: 1%;
 }
 .written {
   grid-area: written;
@@ -37,13 +37,13 @@
 }
 .newNoteArea, .headingInput {
   margin: 3px;
-  width: 90%;
+  width: 96%;
   outline: none;
   resize: none;
   white-space: pre;
+  border: none;
 }
 .headingInput {
-  border: none;
   background-color: rgb(131, 130, 133);
 }
 .newNoteArea {
