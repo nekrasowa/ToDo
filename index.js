@@ -10,12 +10,17 @@ function onPageLoaded () {
       heading: 'Название второй заметки',
       text: 'Текст второй заметки',
       ready: false
+    },
+    {
+      heading: '464545Название второй заметки',
+      text: '48488Текст второй заметки',
+      ready: true
     }
   ]
 
-
   const newNote = document.querySelector('.newNoteArea');
   const headingNote = document.querySelector('.headingInput');
+  const editedNote = document.querySelector('newNoteArea');
   const notes = document.querySelector('.notes');
   let noteId = 0;
   let editedNoteId;
@@ -48,7 +53,13 @@ function onPageLoaded () {
     return `note-${noteId++}`; 
   }
 
-  function createNote(heading, text, ready) {
+  function createNote(obj = {}) {
+    const {
+      heading = headingNote.value,
+      text = newNote.value,
+      ready
+    } = obj
+
     const note = document.createElement('div');
     note.classList.add('note');
     note.setAttribute('id', createId());
@@ -58,22 +69,8 @@ function onPageLoaded () {
     const notesText = document.createElement('p');
     notesText.classList.add('notesText');
     
-    const newHeading = `${heading}`;
-    const newText = `${text}`;
-    
-   
-  // function createNote() {
-  //   const note = document.createElement('div');
-  //   note.classList.add('note');
-  //   note.setAttribute('id', createId());
-
-  //   const headingText = document.createElement('p');
-  //   headingText.classList.add('headingNote');
-  //   const notesText = document.createElement('p');
-  //   notesText.classList.add('notesText');
-    
-  //   const newText = newNote.value;
-  //   const newHeading = headingNote.value;
+    const newHeading = heading;
+    const newText = text;
 
     notes.appendChild(note);
     note.appendChild(headingText);
@@ -103,36 +100,39 @@ function onPageLoaded () {
     });
 
     createBtn(note, 'ready', 'blacklighGreen', () => {
-      if (notesText.style.backgroundColor !== 'gray' 
-          && headingText.style.backgroundColor !== 'gray') {
-        notesText.style.backgroundColor = 'gray';
+      if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
+        notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
-        headingText.style.backgroundColor = 'gray';
         headingText.style.textDecoration = 'line-through';
         
         return
       }
-
-      notesText.style.backgroundColor = '#818E7F';
+      else {
+      notesText.style.backgroundColor = 'rgb(114, 126, 153)';
       notesText.style.textDecoration = 'none';
-      headingText.style.backgroundColor = '#918F82';
+      headingText.style.backgroundColor = 'rgb(131, 130, 133)';
       headingText.style.textDecoration = 'none';
+      }; 
+
+      clear();
+
+      headingNote.focus();
     });
 
     clear();
-
+    
     headingNote.focus();
   }
 
-  for (const variable of notesData) {
-    const values = Object.values(variable);
-    createNote.apply(this, values);
+  for (const obj of notesData) {
+    createNote(obj);
+
   }
 
   function editNote() {
     const elem = document.getElementById(editedNoteId);
-    const editNote = elem.querySelector('.notesText');
-    editNote.textContent = newNote.value;
+    const currEditNote = elem.querySelector('.notesText');
+    currEditNote.textContent = newNote.value;
     const currHeadingNote = elem.querySelector('.headingNote');
     currHeadingNote.textContent = headingNote.value;
     
@@ -147,7 +147,7 @@ function onPageLoaded () {
   }
 
   const add = document.getElementById('addArea');
-  add.onclick = createNote;
+  add.onclick = (e) => createNote();
 
   newNote.addEventListener('keyup', function(event) {
     if (event.key == 'Enter' && event.shiftKey) {
@@ -169,5 +169,3 @@ function onPageLoaded () {
 
 
 document.addEventListener('DOMContentLoaded', onPageLoaded);
-
-
