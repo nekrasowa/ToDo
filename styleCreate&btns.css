@@ -14,7 +14,7 @@
 .written {
   grid-area: written;
 }
-.del {
+/* .del {
   grid-area: del;
 }
 .edit {
@@ -22,11 +22,11 @@
 }
 .ready {
   grid-area: ready;
-}
+} */
 .add {
   grid-area: addd;
-
 }
+
 .icon {
   width: 50px;
 }
@@ -35,6 +35,7 @@
   margin: auto;
   cursor: pointer;
 }
+
 .newNoteArea, .headingInput {
   margin: 3px;
   width: 96%;

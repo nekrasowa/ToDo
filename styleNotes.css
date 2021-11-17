@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  grid-area: notes;
   border-bottom: medium solid;
   padding: 1%;
   margin: 2px;
@@ -13,13 +12,27 @@
   border-color: rgb(58, 2, 16);
   margin: 2px;
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 14fr 1fr;
+  grid-template-rows: 1fr;
   grid-template-areas: 
-                      "hedNote del"
-                      "nText edit"
-                      "nText ready"                      
+                      "noteBlock btnBlock"                      
                       ;
+  margin: 0% 0% 2%;
+}
+
+.noteBlock {
+  grid-area: noteBlock;
+  display: flex;
+  flex-flow: column;
+  border-right: 3px solid;
+  background-color: rgb(114, 126, 153);
+}
+
+.btnBlock {
+  grid-area: btnBlock;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 }
 
 .notesText {
@@ -39,8 +52,7 @@
 }
 .notesText, .headingNote {
   display: flex;
-  border-right: 3px solid;
-  margin-block-start: 0em;
+    margin-block-start: 0em;
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
