@@ -14,15 +14,7 @@
 .written {
   grid-area: written;
 }
-/* .del {
-  grid-area: del;
-}
-.edit {
-  grid-area: edit;
-}
-.ready {
-  grid-area: ready;
-} */
+
 .add {
   grid-area: addd;
 }
@@ -43,6 +35,7 @@
   resize: none;
   white-space: pre;
   border: none;
+  
 }
 .headingInput {
   background-color: rgb(131, 130, 133);
@@ -57,7 +50,9 @@
   display: flex;
   flex-direction: column;
 }
-
+input[type="text"]::placeholder, textarea::placeholder { 
+  color: #2a2c36; 
+} 
 .blacklighGreen:hover {
   box-shadow:0 0 7px 1px #b7ffa2;
 }
