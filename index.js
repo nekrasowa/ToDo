@@ -2,16 +2,17 @@
 function onPageLoaded () {
   const notesData = [
     {
-      heading: 'Первая заметка',
+      heading: 'Название первой заметки',
       text: 'Текст первой заметки',
-      ready: folse
+      ready: false
     },
     {
-      heading: 'Вторая заметка',
+      heading: 'Название второй заметки',
       text: 'Текст второй заметки',
-      ready: folse
+      ready: false
     }
   ]
+
 
   const newNote = document.querySelector('.newNoteArea');
   const headingNote = document.querySelector('.headingInput');
@@ -47,7 +48,7 @@ function onPageLoaded () {
     return `note-${noteId++}`; 
   }
 
-  function createNote() {
+  function createNote(heading, text, ready) {
     const note = document.createElement('div');
     note.classList.add('note');
     note.setAttribute('id', createId());
@@ -57,14 +58,28 @@ function onPageLoaded () {
     const notesText = document.createElement('p');
     notesText.classList.add('notesText');
     
-    const newText = newNote.value;
-    const newHeading = headingNote.value;
+    const newHeading = `${heading}`;
+    const newText = `${text}`;
+    
+   
+  // function createNote() {
+  //   const note = document.createElement('div');
+  //   note.classList.add('note');
+  //   note.setAttribute('id', createId());
+
+  //   const headingText = document.createElement('p');
+  //   headingText.classList.add('headingNote');
+  //   const notesText = document.createElement('p');
+  //   notesText.classList.add('notesText');
+    
+  //   const newText = newNote.value;
+  //   const newHeading = headingNote.value;
 
     notes.appendChild(note);
     note.appendChild(headingText);
     note.appendChild(notesText);
-    notesText.append(newText);
     headingText.append(newHeading);
+    notesText.append(newText);
 
     createBtn(note, 'del', 'blacklighRed', (mainElem) => {
       mainElem.remove();
@@ -109,6 +124,11 @@ function onPageLoaded () {
     headingNote.focus();
   }
 
+  for (const variable of notesData) {
+    const values = Object.values(variable);
+    createNote.apply(this, values);
+  }
+
   function editNote() {
     const elem = document.getElementById(editedNoteId);
     const editNote = elem.querySelector('.notesText');
@@ -143,6 +163,8 @@ function onPageLoaded () {
 
   const edit = document.getElementById('editArea');
   edit.onclick = editNote;
+
+  headingNote.focus()
 }
 
 
