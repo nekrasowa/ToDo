@@ -1,5 +1,6 @@
 'use strict';
 function onPageLoaded () {
+  console.log(Object.entries(localStorage))
   const notesData = [
     {
       heading: 'Название первой заметки',
@@ -23,7 +24,9 @@ function onPageLoaded () {
   const notes = document.querySelector('.notes');
   let noteId = 0;
   let editedNoteId;
-  let deletedNoteId;
+  let editedNoteId2;
+  let deletedKey;
+  let inf; 
  
 
   function clear () {
@@ -51,7 +54,7 @@ function onPageLoaded () {
   }
 
   function createId() {
-    return `note-${++noteId}`; 
+    return `note-${noteId++}`; 
   }
 
   function createNote(obj = {}) {
@@ -88,12 +91,8 @@ function onPageLoaded () {
     notesText.append(newText);
 
     createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {   
-      deletedNoteId = mainElem.getAttribute('id');
-      const id = deletedNoteId.slice(5);
-
-      console.log('id', id)
-
-      console.log('deletedNoteId', deletedNoteId)
+      deletedKey = mainElem.getAttribute('id');
+      const id = deletedKey.slice(5);
 
       localStorage.removeItem(id);
       mainElem.remove();
@@ -111,6 +110,9 @@ function onPageLoaded () {
       btnAdd.style.display = 'none';
       
       editedNoteId = mainElem.getAttribute('id');
+      editedNoteId2 = editedNoteId.slice(5);
+      
+      fromLS(editedNoteId2);
     });
 
     createBtn(note, btnBlock, 'ready', 'blacklighGreen', () => {
@@ -133,6 +135,11 @@ function onPageLoaded () {
       clear();
 
       headingNote.focus();
+       
+      deletedNoteId = mainElem.getAttribute('id');
+      const id = deletedNoteId.slice(5);
+
+
     });
 
     clear();
@@ -147,7 +154,7 @@ function onPageLoaded () {
       ready
     });
 
-    saveInLocalStorage(noteInJSON);
+    saveInLocalStorage(--noteId, noteInJSON);
   }
 
   for (const obj of notesData) {
@@ -166,10 +173,17 @@ function onPageLoaded () {
       btnEdit.style.display = 'none';
       btnAdd.style.display = 'block';
     } 
-    else {const currEditNote = elem.querySelector('.notesText');
-    currEditNote.textContent = newNote.value;
-    const currHeadingNote = elem.querySelector('.headingNote');
-    currHeadingNote.textContent = headingNote.value;}; 
+    else {
+      const currEditNote = elem.querySelector('.notesText');
+      currEditNote.textContent = newNote.value;
+      const currHeadingNote = elem.querySelector('.headingNote');
+      currHeadingNote.textContent = headingNote.value;
+    };
+
+    saveInLocalStorage(editedNoteId2, JSON.stringify({
+      heading: headingNote.value,
+      text: newNote.value
+    }));
     
     clear();
 
@@ -198,9 +212,16 @@ function onPageLoaded () {
     return JSON.stringify(obj)
   }
 
-  function saveInLocalStorage(noteInJSON) {
-    localStorage.setItem(noteId, noteInJSON);
+  function saveInLocalStorage(id ,noteInJSON) {
+    localStorage.setItem(id, noteInJSON);
+    createId()
   }
+
+  function fromLS(id){
+    const rawInf = localStorage.getItem(id);
+    inf = JSON.parse(rawInf);
+    console.log(inf);
+  } 
 
   headingNote.focus()
 }
