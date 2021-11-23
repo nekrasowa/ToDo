@@ -12,18 +12,19 @@ function onPageLoaded () {
       ready: false
     },
     {
-      heading: '464545Название второй заметки',
-      text: '48488Текст второй заметки',
+      heading: 'Название третей заметки',
+      text: 'Текст третей заметки',
       ready: true
     }
   ]
 
   const newNote = document.querySelector('.newNoteArea');
   const headingNote = document.querySelector('.headingInput');
-  const editedNote = document.querySelector('newNoteArea');
   const notes = document.querySelector('.notes');
   let noteId = 0;
   let editedNoteId;
+  let deletedNoteId;
+ 
 
   function clear () {
     document.querySelector('.headingInput').value = '';
@@ -50,14 +51,14 @@ function onPageLoaded () {
   }
 
   function createId() {
-    return `note-${noteId++}`; 
+    return `note-${++noteId}`; 
   }
 
   function createNote(obj = {}) {
     const {
       heading = headingNote.value,
       text = newNote.value,
-      ready
+      ready = false
     } = obj
 
     const note = document.createElement('div');
@@ -86,7 +87,15 @@ function onPageLoaded () {
     headingText.append(newHeading);
     notesText.append(newText);
 
-    createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
+    createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {   
+      deletedNoteId = mainElem.getAttribute('id');
+      const id = deletedNoteId.slice(5);
+
+      console.log('id', id)
+
+      console.log('deletedNoteId', deletedNoteId)
+
+      localStorage.removeItem(id);
       mainElem.remove();
     });
     
@@ -101,9 +110,6 @@ function onPageLoaded () {
       const btnAdd = document.getElementById('addArea');
       btnAdd.style.display = 'none';
       
-      editNote.textContent = '';
-      editHeading.textContent = '';
-
       editedNoteId = mainElem.getAttribute('id');
     });
 
@@ -132,25 +138,39 @@ function onPageLoaded () {
     clear();
 
     headingNote.focus();
+
+    notes.scrollTop = notes.scrollHeight;
+
+    const noteInJSON = addToJSON({
+      heading,
+      text,
+      ready
+    });
+
+    saveInLocalStorage(noteInJSON);
   }
 
   for (const obj of notesData) {
     createNote(obj);
-
   }
 
   function editNote() {
     const elem = document.getElementById(editedNoteId);
-    const currEditNote = elem.querySelector('.notesText');
-    currEditNote.textContent = newNote.value;
-    const currHeadingNote = elem.querySelector('.headingNote');
-    currHeadingNote.textContent = headingNote.value;
-    
+
     const btnEdit = document.getElementById('editArea');
     btnEdit.style.display = 'none';
     const btnAdd = document.getElementById('addArea');
     btnAdd.style.display = 'block';
 
+    if (elem === null) {
+      btnEdit.style.display = 'none';
+      btnAdd.style.display = 'block';
+    } 
+    else {const currEditNote = elem.querySelector('.notesText');
+    currEditNote.textContent = newNote.value;
+    const currHeadingNote = elem.querySelector('.headingNote');
+    currHeadingNote.textContent = headingNote.value;}; 
+    
     clear();
 
     headingNote.focus();
@@ -173,6 +193,14 @@ function onPageLoaded () {
 
   const edit = document.getElementById('editArea');
   edit.onclick = editNote;
+
+  function addToJSON(obj) {
+    return JSON.stringify(obj)
+  }
+
+  function saveInLocalStorage(noteInJSON) {
+    localStorage.setItem(noteId, noteInJSON);
+  }
 
   headingNote.focus()
 }
