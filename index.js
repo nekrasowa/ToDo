@@ -1,6 +1,6 @@
 'use strict';
 function onPageLoaded () {
-  console.log(Object.entries(localStorage))
+  // console.log(Object.entries(localStorage))
   const notesData = [
     {
       heading: 'Название первой заметки',
@@ -15,7 +15,7 @@ function onPageLoaded () {
     {
       heading: 'Название третей заметки',
       text: 'Текст третей заметки',
-      ready: true
+      ready: false
     }
   ]
 
@@ -27,6 +27,8 @@ function onPageLoaded () {
   let editedNoteId2;
   let deletedKey;
   let inf; 
+  let infJSON;
+  let readyKey;
  
 
   function clear () {
@@ -112,40 +114,59 @@ function onPageLoaded () {
       editedNoteId = mainElem.getAttribute('id');
       editedNoteId2 = editedNoteId.slice(5);
       
-      fromLS(editedNoteId2);
+      getInfFromLS(editedNoteId2);
     });
 
-    createBtn(note, btnBlock, 'ready', 'blacklighGreen', () => {
+    createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
         notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
         headingText.style.textDecoration = 'line-through';
         noteBlock.style.backgroundColor = 'rgb(131, 130, 133)';
-        
+
+        readyKey = mainElem.getAttribute('id');
+        const key = readyKey.slice(5);
+
+        getInfFromLS(key);
+        inf.ready = true;
+        addToJSON(inf);
+        saveInLocalStorage(key, infJSON);
+          
         return
       }
       else {
-      notesText.style.backgroundColor = 'rgb(114, 126, 153)';
-      notesText.style.textDecoration = 'none';
-      headingText.style.backgroundColor = 'rgb(131, 130, 133)';
-      headingText.style.textDecoration = 'none';
-      noteBlock.style.backgroundColor = 'rgb(114, 126, 153)';
+        notesText.style.backgroundColor = 'rgb(114, 126, 153)';
+        notesText.style.textDecoration = 'none';
+        headingText.style.backgroundColor = 'rgb(131, 130, 133)';
+        headingText.style.textDecoration = 'none';
+        noteBlock.style.backgroundColor = 'rgb(114, 126, 153)';
+
+        readyKey = mainElem.getAttribute('id');
+        const key = readyKey.slice(5);
+
+        getInfFromLS(key);
+        inf.ready = false;
+        addToJSON(inf);
+        saveInLocalStorage(key, infJSON);
       }; 
 
       clear();
 
       headingNote.focus();
-       
-      deletedNoteId = mainElem.getAttribute('id');
-      const id = deletedNoteId.slice(5);
+      notes.scrollTop = notes.scrollHeight;
+      const noteInJSON = addToJSON({
+        heading,
+        text,
+        ready
+      });
 
-
+      saveInLocalStorage(--noteId, noteInJSON);
+      createId()
+      console.log(noteInJSON)
     });
 
     clear();
-
     headingNote.focus();
-
     notes.scrollTop = notes.scrollHeight;
 
     const noteInJSON = addToJSON({
@@ -155,6 +176,7 @@ function onPageLoaded () {
     });
 
     saveInLocalStorage(--noteId, noteInJSON);
+    createId()
   }
 
   for (const obj of notesData) {
@@ -182,7 +204,8 @@ function onPageLoaded () {
 
     saveInLocalStorage(editedNoteId2, JSON.stringify({
       heading: headingNote.value,
-      text: newNote.value
+      text: newNote.value,
+      ready: false
     }));
     
     clear();
@@ -209,22 +232,21 @@ function onPageLoaded () {
   edit.onclick = editNote;
 
   function addToJSON(obj) {
-    return JSON.stringify(obj)
+    return infJSON = JSON.stringify(obj)
   }
 
-  function saveInLocalStorage(id ,noteInJSON) {
+  function saveInLocalStorage(id, noteInJSON) {
     localStorage.setItem(id, noteInJSON);
-    createId()
   }
 
-  function fromLS(id){
+  function getInfFromLS(id){
     const rawInf = localStorage.getItem(id);
     inf = JSON.parse(rawInf);
-    console.log(inf);
   } 
 
   headingNote.focus()
 }
+
 
 
 document.addEventListener('DOMContentLoaded', onPageLoaded);
