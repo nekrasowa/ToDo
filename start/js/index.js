@@ -1,4 +1,9 @@
+import './function.js';
+
+
 'use strict';
+
+
 function onPageLoaded () {
   // console.log(Object.entries(localStorage))
   const notesData = [
