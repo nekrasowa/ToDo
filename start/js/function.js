@@ -1,4 +1,5 @@
-  // function createBtn(div, mainElem, name, blacklight, cb) {
+'use strict'
+// function createBtn(div, mainElem, name, blacklight, cb) {
   //  { 
   //    const elem = document.createElement('div');
   //   elem.classList.add(name);
