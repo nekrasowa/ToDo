@@ -41,24 +41,24 @@ function onPageLoaded () {
   //   document.querySelector('.newNoteArea').value = '';
   // }
 
-  function createBtn(div, mainElem, name, blacklight, cb) {
-    const elem = document.createElement('div');
-    elem.classList.add(name);
-    elem.classList.add(blacklight);
+  // function createBtn(div, mainElem, name, blacklight, cb) {
+  //   const elem = document.createElement('div');
+  //   elem.classList.add(name);
+  //   elem.classList.add(blacklight);
 
-    const srcSVG = `img/${name}.svg`;
-    const iconElem = new Image;
-    iconElem.src = srcSVG;
-    iconElem.classList.add('icon', `${name}-img`);
-    iconElem.setAttribute('alt', `${name}Icon`);
+  //   const srcSVG = `img/${name}.svg`;
+  //   const iconElem = new Image;
+  //   iconElem.src = srcSVG;
+  //   iconElem.classList.add('icon', `${name}-img`);
+  //   iconElem.setAttribute('alt', `${name}Icon`);
 
-    mainElem.appendChild(elem);
-    elem.appendChild(iconElem);
+  //   mainElem.appendChild(elem);
+  //   elem.appendChild(iconElem);
 
-    elem.onclick = () => {
-      cb(div);
-    };
-  }
+  //   elem.onclick = () => {
+  //     cb(div);
+  //   };
+  // }
 
   function createId() {
     return `note-${noteId++}`; 
@@ -97,7 +97,7 @@ function onPageLoaded () {
     headingText.append(newHeading);
     notesText.append(newText);
 
-    createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {   
+    createBtns('del', 'blacklighRed', (mainElem) => {   
       deletedKey = mainElem.getAttribute('id');
       const id = deletedKey.slice(5);
 
@@ -105,7 +105,7 @@ function onPageLoaded () {
       mainElem.remove();
     });
     
-    createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
+    createBtn('edit', 'blacklighYelow', (mainElem) => {
       const editNote = mainElem.querySelector('.notesText');
       const editHeading = mainElem.querySelector('.headingNote');
       newNote.value = editNote.textContent;
@@ -122,7 +122,7 @@ function onPageLoaded () {
       getInfFromLS(editedNoteId2);
     });
 
-    createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
+    createBtn('ready', 'blacklighGreen', (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
         notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
