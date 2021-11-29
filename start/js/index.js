@@ -1,5 +1,6 @@
 import {
-  createBtns,
+  createBtn,
+  handlerOfBtnDel,
   clearTextArea
 } from './function.js';
 
@@ -33,35 +34,9 @@ function onPageLoaded () {
   let noteId = 0;
   let editedNoteId;
   let editedNoteId2;
-  let deletedKey;
   let inf; 
   let infJSON;
   let readyKey;
- 
-
-  // function clear () {
-  //   document.querySelector('.headingInput').value = '';
-  //   document.querySelector('.newNoteArea').value = '';
-  // }
-
-  // function createBtn(div, mainElem, name, blacklight, cb) {
-  //   const elem = document.createElement('div');
-  //   elem.classList.add(name);
-  //   elem.classList.add(blacklight);
-
-  //   const srcSVG = `img/${name}.svg`;
-  //   const iconElem = new Image;
-  //   iconElem.src = srcSVG;
-  //   iconElem.classList.add('icon', `${name}-img`);
-  //   iconElem.setAttribute('alt', `${name}Icon`);
-
-  //   mainElem.appendChild(elem);
-  //   elem.appendChild(iconElem);
-
-  //   elem.onclick = () => {
-  //     cb(div);
-  //   };
-  // }
 
   function createId() {
     return `note-${noteId++}`; 
@@ -100,15 +75,16 @@ function onPageLoaded () {
     headingText.append(newHeading);
     notesText.append(newText);
 
-    createBtns('del', 'blacklighRed', (mainElem) => {   
-      deletedKey = mainElem.getAttribute('id');
-      const id = deletedKey.slice(5);
-
-      localStorage.removeItem(id);
-      mainElem.remove();
-    }, note);
+    createBtn(noteId,
+              'del', 
+              btnBlock,
+              handlerOfBtnDel)
     
-    createBtns('edit', 'blacklighYelow', (mainElem) => {
+
+    createBtn(noteId,
+              'edit', 
+              btnBlock, 
+              (mainElem) => {
       const editNote = mainElem.querySelector('.notesText');
       const editHeading = mainElem.querySelector('.headingNote');
       newNote.value = editNote.textContent;
@@ -123,9 +99,9 @@ function onPageLoaded () {
       editedNoteId2 = editedNoteId.slice(5);
       
       getInfFromLS(editedNoteId2);
-    }, note);
+    });
 
-    createBtns('ready', 'blacklighGreen', (mainElem) => {
+    createBtn(noteId, 'ready', btnBlock, (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
         notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
@@ -171,7 +147,7 @@ function onPageLoaded () {
       saveInLocalStorage(--noteId, noteInJSON);
       createId()
       console.log(noteInJSON)
-    }, note);
+    });
 
     clearTextArea();
     headingNote.focus();
@@ -253,8 +229,7 @@ function onPageLoaded () {
   } 
 
   headingNote.focus()
+
 }
-
-
 
 document.addEventListener('DOMContentLoaded', onPageLoaded);

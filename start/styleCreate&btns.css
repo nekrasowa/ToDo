@@ -53,12 +53,12 @@
 input[type="text"]::placeholder, textarea::placeholder { 
   color: #2a2c36; 
 } 
-.blacklighGreen:hover {
+.rearyBlackligh:hover {
   box-shadow:0 0 7px 1px #b7ffa2;
 }
-.blacklighYelow:hover {
+.editBlackligh:hover {
   box-shadow:0 0 5px 1px #fff891;
 }
-.blacklighRed:hover {
+.delBlackligh:hover {
   box-shadow:0 0 5px 1px #ffa7a7;
 }

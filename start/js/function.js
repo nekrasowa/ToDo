@@ -1,55 +1,60 @@
-
 'use strict'
-// function createBtn(div, mainElem, name, blacklight, cb) {
-  //  { 
-  //    const elem = document.createElement('div');
-  //   elem.classList.add(name);
-  //   elem.classList.add(blacklight);
 
-  //   const srcSVG = `img/${name}.svg`;
-  //   const iconElem = new Image;
-  //   iconElem.src = srcSVG;
-  //   iconElem.classList.add('icon', `${name}-img`);
-  //   iconElem.setAttribute('alt', `${name}Icon`);
-  // }
+// export function handlerOfBtnDel() {
+//   const deletedKey = this.getAttribute('id')
+//   console.log("deletedKey", deletedKey)
 
-  //   mainElem.appendChild(elem);
-  //   elem.appendChild(iconElem);
+//   const id = deletedKey.slice(5)
 
-  //   elem.onclick = () => {
-  //     cb(div);
-  //   };
-  // }
+//   localStorage.removeItem(id)
+//   this.remove()
+// }
 
-export function createBtns(name, blacklight, cb, mainElem) {
-  const elem = document.createElement('div')
-  addClasses(elem, name, blacklight)
-  const iconElem = addIcons(name)
+// document.querySelector('icon').onclick = function getNote() {
+  
+// }
 
-  mainElem.appendChild(elem)
-  elem.appendChild(iconElem)
+document.addEventListener('click', getId)
 
-  elem.onclick = () => {
-    cb();
-  };
+function getId(e) {
+  // const obj = this.toString()
+  // console.log('[typeof obj]:', typeof obj)
+  // obj.slice(13)
+  console.log('[e]:', e)
+  console.log('[className]:', e.target.className)
+
+  // 13
 }
 
-function addIcons(name) {
+
+export function createBtn(noteId,
+                          name,
+                          mainArea,
+                          cb) {
+    const elem = document.createElement('div')
+    addClasses(elem, name)
+    const iconElem = addIcons(noteId, name)
+
+    mainArea.appendChild(elem)
+    elem.appendChild(iconElem)
+
+    elem.onclick = cb
+  }
+
+function addClasses(elem, name) {
+  elem.classList.add(name)
+  elem.classList.add(`${name}blacklight`)
+}
+function addIcons(noteId, name) {
   const srcSVG = `img/${name}.svg`
   const iconElem = new Image
   iconElem.src = srcSVG
   iconElem.classList.add('icon', `${name}-img`)
   iconElem.setAttribute('alt', `${name}Icon`)
+  iconElem.classList.add(noteId)
 
   return iconElem
 }
-
-function addClasses(elem, name, blacklight) {
-  elem.classList.add(name)
-  elem.classList.add(blacklight)
-}
-
-
 
 export function clearTextArea() {
 // (selectors = ['.headingInput', '.newNoteArea']) {
