@@ -105,7 +105,7 @@ function onPageLoaded () {
       mainElem.remove();
     });
     
-    createBtn('edit', 'blacklighYelow', (mainElem) => {
+    createBtns('edit', 'blacklighYelow', (mainElem) => {
       const editNote = mainElem.querySelector('.notesText');
       const editHeading = mainElem.querySelector('.headingNote');
       newNote.value = editNote.textContent;
@@ -122,7 +122,7 @@ function onPageLoaded () {
       getInfFromLS(editedNoteId2);
     });
 
-    createBtn('ready', 'blacklighGreen', (mainElem) => {
+    createBtns('ready', 'blacklighGreen', (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
         notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
