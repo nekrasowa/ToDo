@@ -1,3 +1,4 @@
+
 'use strict'
 // function createBtn(div, mainElem, name, blacklight, cb) {
   //  { 
@@ -20,10 +21,10 @@
   //   };
   // }
 
-function createBtns(name, blacklight, cb, mainElem = note) {
+export function createBtns(name, blacklight, cb, mainElem) {
   const elem = document.createElement('div')
-  AddClasses(name, blacklight)
-  AddIcons(name)
+  addClasses(elem, name, blacklight)
+  const iconElem = addIcons(name)
 
   mainElem.appendChild(elem)
   elem.appendChild(iconElem)
@@ -33,22 +34,24 @@ function createBtns(name, blacklight, cb, mainElem = note) {
   };
 }
 
-function AddIcons(name) {
+function addIcons(name) {
   const srcSVG = `img/${name}.svg`
   const iconElem = new Image
   iconElem.src = srcSVG
   iconElem.classList.add('icon', `${name}-img`)
   iconElem.setAttribute('alt', `${name}Icon`)
+
+  return iconElem
 }
 
-function AddClasses(name, blacklight) {
+function addClasses(elem, name, blacklight) {
   elem.classList.add(name)
   elem.classList.add(blacklight)
 }
 
 
 
-function clearTextArea() {
+export function clearTextArea() {
 // (selectors = ['.headingInput', '.newNoteArea']) {
   document.querySelector('.headingInput').value = '';
   document.querySelector('.newNoteArea').value = '';
@@ -56,7 +59,3 @@ function clearTextArea() {
   //   document.querySelector(selector).value = ''
   // }
 }
-
-
-
-

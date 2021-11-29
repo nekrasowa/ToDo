@@ -1,4 +1,7 @@
-import './function.js';
+import {
+  createBtns,
+  clearTextArea
+} from './function.js';
 
 
 'use strict';
@@ -103,7 +106,7 @@ function onPageLoaded () {
 
       localStorage.removeItem(id);
       mainElem.remove();
-    });
+    }, note);
     
     createBtns('edit', 'blacklighYelow', (mainElem) => {
       const editNote = mainElem.querySelector('.notesText');
@@ -120,7 +123,7 @@ function onPageLoaded () {
       editedNoteId2 = editedNoteId.slice(5);
       
       getInfFromLS(editedNoteId2);
-    });
+    }, note);
 
     createBtns('ready', 'blacklighGreen', (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
@@ -168,7 +171,7 @@ function onPageLoaded () {
       saveInLocalStorage(--noteId, noteInJSON);
       createId()
       console.log(noteInJSON)
-    });
+    }, note);
 
     clearTextArea();
     headingNote.focus();
