@@ -36,10 +36,10 @@ function onPageLoaded () {
   let readyKey;
  
 
-  function clear () {
-    document.querySelector('.headingInput').value = '';
-    document.querySelector('.newNoteArea').value = '';
-  }
+  // function clear () {
+  //   document.querySelector('.headingInput').value = '';
+  //   document.querySelector('.newNoteArea').value = '';
+  // }
 
   function createBtn(div, mainElem, name, blacklight, cb) {
     const elem = document.createElement('div');
@@ -155,7 +155,7 @@ function onPageLoaded () {
         saveInLocalStorage(key, infJSON);
       }; 
 
-      clear();
+      clearTextArea();
 
       headingNote.focus();
       notes.scrollTop = notes.scrollHeight;
@@ -170,7 +170,7 @@ function onPageLoaded () {
       console.log(noteInJSON)
     });
 
-    clear();
+    clearTextArea();
     headingNote.focus();
     notes.scrollTop = notes.scrollHeight;
 
@@ -213,7 +213,7 @@ function onPageLoaded () {
       ready: false
     }));
     
-    clear();
+    clearTextArea();
 
     headingNote.focus();
   }
