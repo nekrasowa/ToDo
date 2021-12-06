@@ -1,6 +1,6 @@
 import {
   createBtn,
-  handlerOfBtnDel,
+  delBtnHandler,
   clearTextArea
 } from './function.js';
 
@@ -39,7 +39,15 @@ function onPageLoaded () {
   let readyKey;
 
   function createId() {
-    return `note-${noteId++}`; 
+    const id = noteId
+    const strNoteId = `note-${id}`
+
+    noteId++
+
+    return {
+      id,
+      strNoteId
+    }
   }
 
   function createNote(obj = {}) {
@@ -48,10 +56,14 @@ function onPageLoaded () {
       text = newNote.value,
       ready = false
     } = obj
+    const {
+      id,
+      strNoteId
+    } = createId()
 
     const note = document.createElement('div');
     note.classList.add('note');
-    note.setAttribute('id', createId());
+    note.setAttribute('id', strNoteId);
 
     const noteBlock = document.createElement('div');
     noteBlock.classList.add('noteBlock');
@@ -75,13 +87,13 @@ function onPageLoaded () {
     headingText.append(newHeading);
     notesText.append(newText);
 
-    createBtn(noteId,
+    createBtn(id,
               'del', 
               btnBlock,
-              handlerOfBtnDel)
+              delBtnHandler)
     
 
-    createBtn(noteId,
+    createBtn(id,
               'edit', 
               btnBlock, 
               (mainElem) => {
@@ -101,7 +113,7 @@ function onPageLoaded () {
       getInfFromLS(editedNoteId2);
     });
 
-    createBtn(noteId, 'ready', btnBlock, (mainElem) => {
+    createBtn(id, 'ready', btnBlock, (mainElem) => {
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
         notesText.style.backgroundColor = 'rgb(131, 130, 133)';
         notesText.style.textDecoration = 'line-through';
