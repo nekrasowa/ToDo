@@ -1,12 +1,30 @@
+'use strict'
+
 import {
-  createBtn,
-  delBtnHandler,
-  clearTextArea
-} from './function.js';
+  clearTextArea,
+  readyBtnHandler,
+  createId,
+  scrollTop
+} from './function.js'
 
+import {createBtn} from './createBtn.js'
+import {createNoteBox} from './createNoteBox.js'
+import {delBtnHandler} from './delBtnHandler.js'
+import {
+  addToJSON,
+  saveInLocalStorage
+} from './saveNotesLS.js'
 
-'use strict';
+export const newNote = document.querySelector('.newNoteArea');
+export const headingNote = document.querySelector('.headingInput');
+export const notes = document.querySelector('.notes');
 
+export let noteId = 0 
+let editedNoteId;
+let editedNoteId2;
+let inf; 
+export let infJSON;
+let readyKey;
 
 function onPageLoaded () {
   // console.log(Object.entries(localStorage))
@@ -28,72 +46,18 @@ function onPageLoaded () {
     }
   ]
 
-  const newNote = document.querySelector('.newNoteArea');
-  const headingNote = document.querySelector('.headingInput');
-  const notes = document.querySelector('.notes');
-  let noteId = 0;
-  let editedNoteId;
-  let editedNoteId2;
-  let inf; 
-  let infJSON;
-  let readyKey;
-
-  function createId() {
-    const id = noteId
-    const strNoteId = `note-${id}`
-
-    noteId++
-
-    return {
-      id,
-      strNoteId
-    }
-  }
-
   function createNote(obj = {}) {
-    const {
-      heading = headingNote.value,
-      text = newNote.value,
-      ready = false
-    } = obj
-    const {
-      id,
-      strNoteId
-    } = createId()
+    const btnBlock = createNoteBox(obj = {})
 
-    const note = document.createElement('div');
-    note.classList.add('note');
-    note.setAttribute('id', strNoteId);
-
-    const noteBlock = document.createElement('div');
-    noteBlock.classList.add('noteBlock');
-
-    const btnBlock = document.createElement('div');
-    btnBlock.classList.add('btnBlock');
-
-    const headingText = document.createElement('p');
-    headingText.classList.add('headingNote');
-    const notesText = document.createElement('p');
-    notesText.classList.add('notesText');
+    createBtn(
+      noteId,
+      'del', 
+      btnBlock,
+      delBtnHandler
+      )
     
-    const newHeading = heading;
-    const newText = text;
-
-    notes.appendChild(note);
-    note.appendChild(noteBlock);
-    noteBlock.appendChild(headingText);
-    noteBlock.appendChild(notesText);
-    note.appendChild(btnBlock);
-    headingText.append(newHeading);
-    notesText.append(newText);
-
-    createBtn(id,
-              'del', 
-              btnBlock,
-              delBtnHandler)
-    
-
-    createBtn(id,
+    createBtn(
+      noteId,
               'edit', 
               btnBlock, 
               (mainElem) => {
@@ -111,68 +75,61 @@ function onPageLoaded () {
       editedNoteId2 = editedNoteId.slice(5);
       
       getInfFromLS(editedNoteId2);
-    });
+    })
 
-    createBtn(id, 'ready', btnBlock, (mainElem) => {
-      if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
-        notesText.style.backgroundColor = 'rgb(131, 130, 133)';
-        notesText.style.textDecoration = 'line-through';
-        headingText.style.textDecoration = 'line-through';
-        noteBlock.style.backgroundColor = 'rgb(131, 130, 133)';
-
-        readyKey = mainElem.getAttribute('id');
-        const key = readyKey.slice(5);
-
-        getInfFromLS(key);
-        inf.ready = true;
-        addToJSON(inf);
-        saveInLocalStorage(key, infJSON);
-          
-        return
-      }
-      else {
-        notesText.style.backgroundColor = 'rgb(114, 126, 153)';
-        notesText.style.textDecoration = 'none';
-        headingText.style.backgroundColor = 'rgb(131, 130, 133)';
-        headingText.style.textDecoration = 'none';
-        noteBlock.style.backgroundColor = 'rgb(114, 126, 153)';
-
-        readyKey = mainElem.getAttribute('id');
-        const key = readyKey.slice(5);
-
-        getInfFromLS(key);
-        inf.ready = false;
-        addToJSON(inf);
-        saveInLocalStorage(key, infJSON);
-      }; 
-
-      clearTextArea();
-
-      headingNote.focus();
-      notes.scrollTop = notes.scrollHeight;
-      const noteInJSON = addToJSON({
-        heading,
-        text,
-        ready
-      });
-
-      saveInLocalStorage(--noteId, noteInJSON);
-      createId()
-      console.log(noteInJSON)
-    });
+    //TODO:
+    createBtn(
+      noteId, 
+      'ready', 
+      btnBlock, 
+      (mainElem) => {
+          // if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
+          //   notesText.style.backgroundColor = 'rgb(131, 130, 133)';
+          //   notesText.style.textDecoration = 'line-through';
+          //   headingText.style.textDecoration = 'line-through';
+          //   noteBlock.style.backgroundColor = 'rgb(131, 130, 133)';
+        
+          //   readyKey = mainElem.getAttribute('id');
+          //   const key = readyKey.slice(5);
+        
+          //   getInfFromLS(key);
+          //   inf.ready = true;
+          //   addToJSON(inf);
+          //   saveInLocalStorage(key, infJSON);
+              
+          //   return
+          // }
+          // else {
+          //   notesText.style.backgroundColor = 'rgb(114, 126, 153)';
+          //   notesText.style.textDecoration = 'none';
+          //   headingText.style.backgroundColor = 'rgb(131, 130, 133)';
+          //   headingText.style.textDecoration = 'none';
+          //   noteBlock.style.backgroundColor = 'rgb(114, 126, 153)';
+        
+          //   readyKey = mainElem.getAttribute('id');
+          //   const key = readyKey.slice(5);
+        
+          //   getInfFromLS(key);
+          //   inf.ready = false;
+          //   addToJSON(inf);
+          //   saveInLocalStorage(key, infJSON);
+          // }
+    })
 
     clearTextArea();
     headingNote.focus();
-    notes.scrollTop = notes.scrollHeight;
+    scrollTop()
 
-    const noteInJSON = addToJSON({
-      heading,
-      text,
-      ready
-    });
+    // const noteInJSON = addToJSON({
+    //   heading,
+    //   text,
+    //   ready
+    // });
+     
+    // noteId++
 
-    saveInLocalStorage(--noteId, noteInJSON);
-    createId()
+    // saveInLocalStorage(--noteId, noteInJSON);
+    // createId()
   }
 
   for (const obj of notesData) {
@@ -226,14 +183,6 @@ function onPageLoaded () {
 
   const edit = document.getElementById('editArea');
   edit.onclick = editNote;
-
-  function addToJSON(obj) {
-    return infJSON = JSON.stringify(obj)
-  }
-
-  function saveInLocalStorage(id, noteInJSON) {
-    localStorage.setItem(id, noteInJSON);
-  }
 
   function getInfFromLS(id){
     const rawInf = localStorage.getItem(id);
