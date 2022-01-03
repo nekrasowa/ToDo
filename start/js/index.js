@@ -7,6 +7,13 @@ function onPageLoaded () {
 
   const oldNotes = getNotesFromLS()
   console.log("oldNotes:", oldNotes)
+
+  oldNotes.forEach(createNote({
+    heading,
+    text,
+    ready
+  }))
+
   // console.log(Object.entries(localStorage))
   const notesData = [
     // {
