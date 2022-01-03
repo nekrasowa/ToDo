@@ -1,2 +1,1 @@
-
- console.log("добавляйся сука тварь")
+'use strict'

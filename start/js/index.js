@@ -1,27 +1,26 @@
+'use strict'
+
 import './function.js';
-
-
-'use strict';
 
 
 function onPageLoaded () {
   // console.log(Object.entries(localStorage))
   const notesData = [
-    {
-      heading: 'Название первой заметки',
-      text: 'Текст первой заметки',
-      ready: false
-    },
-    {
-      heading: 'Название второй заметки',
-      text: 'Текст второй заметки',
-      ready: false
-    },
-    {
-      heading: 'Название третей заметки',
-      text: 'Текст третей заметки',
-      ready: false
-    }
+    // {
+    //   heading: 'Название первой заметки',
+    //   text: 'Текст первой заметки',
+    //   ready: false
+    // },
+    // {
+    //   heading: 'Название второй заметки',
+    //   text: 'Текст второй заметки',
+    //   ready: false
+    // },
+    // {
+    //   heading: 'Название третей заметки',
+    //   text: 'Текст третей заметки',
+    //   ready: false
+    // }
   ]
 
   const newNote = document.querySelector('.newNoteArea');
