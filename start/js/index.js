@@ -1,9 +1,12 @@
 'use strict'
 
-import './function.js';
+import {getNotesFromLS} from './function.js'
 
 
 function onPageLoaded () {
+
+  const oldNotes = getNotesFromLS()
+  console.log("oldNotes:", oldNotes)
   // console.log(Object.entries(localStorage))
   const notesData = [
     // {
@@ -23,16 +26,16 @@ function onPageLoaded () {
     // }
   ]
 
-  const newNote = document.querySelector('.newNoteArea');
-  const headingNote = document.querySelector('.headingInput');
-  const notes = document.querySelector('.notes');
-  let noteId = 0;
-  let editedNoteId;
-  let editedNoteId2;
-  let deletedKey;
-  let inf; 
-  let infJSON;
-  let readyKey;
+  const newNote = document.querySelector('.newNoteArea')
+  const headingNote = document.querySelector('.headingInput')
+  const notes = document.querySelector('.notes')
+  let noteId = 0
+  let editedNoteId
+  let editedNoteId2
+  let deletedKey
+  let inf
+  let infJSON
+  let readyKey
  
 
   function clear () {
