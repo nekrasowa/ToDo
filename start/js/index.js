@@ -6,15 +6,9 @@ import {getNotesFromLS} from './function.js'
 function onPageLoaded () {
 
   const oldNotes = getNotesFromLS()
+
   console.log("oldNotes:", oldNotes)
 
-  oldNotes.forEach(createNote({
-    heading,
-    text,
-    ready
-  }))
-
-  // console.log(Object.entries(localStorage))
   const notesData = [
     // {
     //   heading: 'Название первой заметки',
@@ -43,8 +37,9 @@ function onPageLoaded () {
   let inf
   let infJSON
   let readyKey
- 
 
+  oldNotes.forEach(createNote)
+ 
   function clear () {
     document.querySelector('.headingInput').value = '';
     document.querySelector('.newNoteArea').value = '';
@@ -74,6 +69,7 @@ function onPageLoaded () {
   }
 
   function createNote(obj = {}) {
+    console.log('[createNote-obj]:', obj)
     const {
       heading = headingNote.value,
       text = newNote.value,
@@ -193,10 +189,6 @@ function onPageLoaded () {
     createId()
   }
 
-  for (const obj of notesData) {
-    createNote(obj);
-  }
-
   function editNote() {
     const elem = document.getElementById(editedNoteId);
 
@@ -260,7 +252,6 @@ function onPageLoaded () {
 
   headingNote.focus()
 }
-
 
 
 document.addEventListener('DOMContentLoaded', onPageLoaded);
