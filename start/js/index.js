@@ -9,28 +9,28 @@ function onPageLoaded () {
 
   console.log("oldNotes:", oldNotes)
 
-  const notesData = [
-    // {
-    //   heading: 'Название первой заметки',
-    //   text: 'Текст первой заметки',
-    //   ready: false
-    // },
-    // {
-    //   heading: 'Название второй заметки',
-    //   text: 'Текст второй заметки',
-    //   ready: false
-    // },
-    // {
-    //   heading: 'Название третей заметки',
-    //   text: 'Текст третей заметки',
-    //   ready: false
-    // }
-  ]
+  // const notesData = [
+  //   // {
+  //   //   heading: 'Название первой заметки',
+  //   //   text: 'Текст первой заметки',
+  //   //   ready: false
+  //   // },
+  //   // {
+  //   //   heading: 'Название второй заметки',
+  //   //   text: 'Текст второй заметки',
+  //   //   ready: false
+  //   // },
+  //   // {
+  //   //   heading: 'Название третей заметки',
+  //   //   text: 'Текст третей заметки',
+  //   //   ready: false
+  //   // }
+  // ]
 
   const newNote = document.querySelector('.newNoteArea')
   const headingNote = document.querySelector('.headingInput')
   const notes = document.querySelector('.notes')
-  let noteId = 0
+  const allIdSet = new Set([-1])
   let editedNoteId
   let editedNoteId2
   let deletedKey
@@ -65,11 +65,19 @@ function onPageLoaded () {
   }
 
   function createId() {
-    return `note-${noteId++}`; 
+    const maxId = Math.max(...allIdSet)
+    console.log("maxId", maxId, typeof maxId)
+
+    const noteId = maxId + 1
+    allIdSet.add(noteId)
+    console.log("noteId", noteId, typeof noteId)
+
+
+    return `note-${noteId}` 
   }
 
   function createNote(obj = {}) {
-    console.log('[createNote-obj]:', obj)
+    // console.log('[createNote-obj]:', obj)
     const {
       heading = headingNote.value,
       text = newNote.value,
@@ -170,7 +178,10 @@ function onPageLoaded () {
         ready
       });
 
-      saveInLocalStorage(--noteId, noteInJSON);
+      readyKey = mainElem.getAttribute('id')
+      const key = readyKey.slice(5)
+
+      saveInLocalStorage(key, noteInJSON)
       createId()
       console.log(noteInJSON)
     });
@@ -185,8 +196,12 @@ function onPageLoaded () {
       ready
     });
 
-    saveInLocalStorage(--noteId, noteInJSON);
-    createId()
+    const id = note.getAttribute('id')
+    const noteId = id.slice(5)
+
+    saveInLocalStorage(noteId, noteInJSON)
+    console.log("allIdSet", allIdSet)
+
   }
 
   function editNote() {

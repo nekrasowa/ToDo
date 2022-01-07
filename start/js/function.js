@@ -29,8 +29,7 @@ export function getNotesFromLS() {
     for (const [key, value] of sorted) {
 
       const parsedKey = Number.parseInt(key)
-      console.log (key)
-      console.log (parsedKey)
+      
       if (!Number.isInteger(parsedKey)) {
         continue
       }
