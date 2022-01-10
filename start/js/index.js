@@ -1,82 +1,52 @@
 'use strict'
 
 import {getNotesFromLS} from './function.js'
-
+const headingNote = document.querySelector('.headingInput')
 
 function onPageLoaded () {
-
   const oldNotes = getNotesFromLS()
 
-  console.log("oldNotes:", oldNotes)
-
-  // const notesData = [
-  //   // {
-  //   //   heading: 'Название первой заметки',
-  //   //   text: 'Текст первой заметки',
-  //   //   ready: false
-  //   // },
-  //   // {
-  //   //   heading: 'Название второй заметки',
-  //   //   text: 'Текст второй заметки',
-  //   //   ready: false
-  //   // },
-  //   // {
-  //   //   heading: 'Название третей заметки',
-  //   //   text: 'Текст третей заметки',
-  //   //   ready: false
-  //   // }
-  // ]
-
   const newNote = document.querySelector('.newNoteArea')
-  const headingNote = document.querySelector('.headingInput')
   const notes = document.querySelector('.notes')
   const allIdSet = new Set([-1])
   let editedNoteId
-  let editedNoteId2
-  let deletedKey
-  let inf
-  let infJSON
-  let readyKey
 
   oldNotes.forEach(createNote)
  
   function clear () {
-    document.querySelector('.headingInput').value = '';
-    document.querySelector('.newNoteArea').value = '';
+    document.querySelector('.headingInput').value = ''
+    document.querySelector('.newNoteArea').value = ''
   }
 
   function createBtn(div, mainElem, name, blacklight, cb) {
-    const elem = document.createElement('div');
-    elem.classList.add(name);
-    elem.classList.add(blacklight);
+    const elem = document.createElement('div')
+    elem.classList.add(name)
+    elem.classList.add(blacklight)
 
-    const srcSVG = `img/${name}.svg`;
-    const iconElem = new Image;
-    iconElem.src = srcSVG;
-    iconElem.classList.add('icon', `${name}-img`);
-    iconElem.setAttribute('alt', `${name}Icon`);
+    const srcSVG = `img/${name}.svg`
+    const iconElem = new Image
+    iconElem.src = srcSVG
+    iconElem.classList.add('icon', `${name}-img`)
+    iconElem.setAttribute('alt', `${name}Icon`)
 
-    mainElem.appendChild(elem);
-    elem.appendChild(iconElem);
+    mainElem.appendChild(elem)
+    elem.appendChild(iconElem)
 
     elem.onclick = () => {
-      cb(div);
-    };
+      cb(div)
+    }
   }
 
   function createId() {
     const maxId = Math.max(...allIdSet)
-    console.log("maxId", maxId, typeof maxId)
 
     const noteId = maxId + 1
     allIdSet.add(noteId)
-    console.log("noteId", noteId, typeof noteId)
-
 
     return `note-${noteId}` 
   }
 
-  function createNote(obj = {}) {
+  function createNote(obj = {}, localKey) {
     // console.log('[createNote-obj]:', obj)
     const {
       heading = headingNote.value,
@@ -84,111 +54,95 @@ function onPageLoaded () {
       ready = false
     } = obj
 
-    const note = document.createElement('div');
-    note.classList.add('note');
-    note.setAttribute('id', createId());
+    const note = document.createElement('div')
+    note.classList.add('note')
+    const currKey = localKey
+      ? `note-${localKey}`
+      : createId()
+    note.setAttribute('id', currKey)
 
-    const noteBlock = document.createElement('div');
-    noteBlock.classList.add('noteBlock');
+    const noteBlock = document.createElement('div')
+    noteBlock.classList.add('noteBlock')
 
-    const btnBlock = document.createElement('div');
-    btnBlock.classList.add('btnBlock');
+    const btnBlock = document.createElement('div')
+    btnBlock.classList.add('btnBlock')
 
-    const headingText = document.createElement('p');
-    headingText.classList.add('headingNote');
-    const notesText = document.createElement('p');
-    notesText.classList.add('notesText');
+    const headingText = document.createElement('p')
+    headingText.classList.add('headingNote')
+    const notesText = document.createElement('p')
+    notesText.classList.add('notesText')
     
-    const newHeading = heading;
-    const newText = text;
+    const newHeading = heading
+    const newText = text
 
-    notes.appendChild(note);
-    note.appendChild(noteBlock);
-    noteBlock.appendChild(headingText);
-    noteBlock.appendChild(notesText);
-    note.appendChild(btnBlock);
-    headingText.append(newHeading);
-    notesText.append(newText);
+    notes.appendChild(note)
+    note.appendChild(noteBlock)
+    noteBlock.appendChild(headingText)
+    noteBlock.appendChild(notesText)
+    note.appendChild(btnBlock)
+    headingText.append(newHeading)
+    notesText.append(newText)
 
     createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {   
-      deletedKey = mainElem.getAttribute('id');
-      const id = deletedKey.slice(5);
+      const deletedKey = mainElem.getAttribute('id')
+      const id = deletedKey.slice(5)
 
-      localStorage.removeItem(id);
-      mainElem.remove();
-    });
+      localStorage.removeItem(id)
+      mainElem.remove()
+    })
     
     createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
-      const editNote = mainElem.querySelector('.notesText');
-      const editHeading = mainElem.querySelector('.headingNote');
-      newNote.value = editNote.textContent;
-      headingNote.value = editHeading.textContent;
+      const editNote = mainElem.querySelector('.notesText')
+      const editHeading = mainElem.querySelector('.headingNote')
+      newNote.value = editNote.textContent
+      headingNote.value = editHeading.textContent
 
-      const btnEdit = document.getElementById('editArea');
-      btnEdit.style.display = 'block';
-      const btnAdd = document.getElementById('addArea');
-      btnAdd.style.display = 'none';
+      const btnEdit = document.getElementById('editArea') //TODO: функция
+      btnEdit.style.display = 'block'
+      const btnAdd = document.getElementById('addArea')
+      btnAdd.style.display = 'none'
       
-      editedNoteId = mainElem.getAttribute('id');
-      editedNoteId2 = editedNoteId.slice(5);
+      const editedId = mainElem.getAttribute('id')
+      editedNoteId = editedId.slice(5)
       
-      getInfFromLS(editedNoteId2);
+      // getInfFromLS(editedNoteId2); // TODO:
     });
 
     createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
+      const readyKey = mainElem.getAttribute('id')
+      const key = readyKey.slice(5)
+      const inf = getInfFromLS(key)
+
       if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
-        notesText.style.backgroundColor = 'rgb(131, 130, 133)';
-        notesText.style.textDecoration = 'line-through';
-        headingText.style.textDecoration = 'line-through';
-        noteBlock.style.backgroundColor = 'rgb(131, 130, 133)';
+        notesText.style.backgroundColor = 'rgb(131, 130, 133)'
+        notesText.style.textDecoration = 'line-through'
+        headingText.style.textDecoration = 'line-through'
+        noteBlock.style.backgroundColor = 'rgb(131, 130, 133)'
 
-        readyKey = mainElem.getAttribute('id');
-        const key = readyKey.slice(5);
-
-        getInfFromLS(key);
-        inf.ready = true;
-        addToJSON(inf);
-        saveInLocalStorage(key, infJSON);
-          
+        inf.ready = true
+        const infJSON = addToJSON(inf)
+        saveInLocalStorage(key, infJSON)
+        clear()
+        headingNote.focus()
+        notes.scrollTop = notes.scrollHeight
         return
       }
-      else {
-        notesText.style.backgroundColor = 'rgb(114, 126, 153)';
-        notesText.style.textDecoration = 'none';
-        headingText.style.backgroundColor = 'rgb(131, 130, 133)';
-        headingText.style.textDecoration = 'none';
-        noteBlock.style.backgroundColor = 'rgb(114, 126, 153)';
 
-        readyKey = mainElem.getAttribute('id');
-        const key = readyKey.slice(5);
+      notesText.style.backgroundColor = 'rgb(114, 126, 153)'
+      notesText.style.textDecoration = 'none'
+      headingText.style.backgroundColor = 'rgb(131, 130, 133)'
+      headingText.style.textDecoration = 'none'
+      noteBlock.style.backgroundColor = 'rgb(114, 126, 153)'
 
-        getInfFromLS(key);
-        inf.ready = false;
-        addToJSON(inf);
-        saveInLocalStorage(key, infJSON);
-      }; 
+      inf.ready = false
+      const infJSON = addToJSON(inf)
+      saveInLocalStorage(key, infJSON)
 
-      clear();
-
-      headingNote.focus();
-      notes.scrollTop = notes.scrollHeight;
-      const noteInJSON = addToJSON({
-        heading,
-        text,
-        ready
-      });
-
-      readyKey = mainElem.getAttribute('id')
-      const key = readyKey.slice(5)
-
-      saveInLocalStorage(key, noteInJSON)
-      createId()
-      console.log(noteInJSON)
+      clear()
+      headingNote.focus()
+      notes.scrollTop = notes.scrollHeight
     });
 
-    clear();
-    headingNote.focus();
-    notes.scrollTop = notes.scrollHeight;
 
     const noteInJSON = addToJSON({
       heading,
@@ -200,30 +154,36 @@ function onPageLoaded () {
     const noteId = id.slice(5)
 
     saveInLocalStorage(noteId, noteInJSON)
-    console.log("allIdSet", allIdSet)
 
+    clear()
+    headingNote.focus()
+    notes.scrollTop = notes.scrollHeight
   }
 
   function editNote() {
-    const elem = document.getElementById(editedNoteId);
+    const btnEdit = document.getElementById('editArea')
+    btnEdit.style.display = 'none'
+    const btnAdd = document.getElementById('addArea')
+    btnAdd.style.display = 'block'
 
-    const btnEdit = document.getElementById('editArea');
-    btnEdit.style.display = 'none';
-    const btnAdd = document.getElementById('addArea');
-    btnAdd.style.display = 'block';
+    const elem = document.getElementById(`note-${editedNoteId}`)
+    console.log(typeof editedNoteId)
+    console.log(elem)
 
     if (elem === null) {
-      btnEdit.style.display = 'none';
-      btnAdd.style.display = 'block';
-    } 
-    else {
-      const currEditNote = elem.querySelector('.notesText');
-      currEditNote.textContent = newNote.value;
-      const currHeadingNote = elem.querySelector('.headingNote');
-      currHeadingNote.textContent = headingNote.value;
-    };
+      btnEdit.style.display = 'none'
+      btnAdd.style.display = 'block'
 
-    saveInLocalStorage(editedNoteId2, JSON.stringify({
+      return
+    } 
+
+    const currEditNote = elem.querySelector('.notesText')
+    currEditNote.textContent = newNote.value
+
+    const currHeadingNote = elem.querySelector('.headingNote')
+    currHeadingNote.textContent = headingNote.value
+
+    saveInLocalStorage(editedNoteId, JSON.stringify({
       heading: headingNote.value,
       text: newNote.value,
       ready: false
@@ -253,7 +213,7 @@ function onPageLoaded () {
   edit.onclick = editNote;
 
   function addToJSON(obj) {
-    return infJSON = JSON.stringify(obj)
+    return JSON.stringify(obj)
   }
 
   function saveInLocalStorage(id, noteInJSON) {
@@ -262,7 +222,8 @@ function onPageLoaded () {
 
   function getInfFromLS(id){
     const rawInf = localStorage.getItem(id);
-    inf = JSON.parse(rawInf);
+
+    return JSON.parse(rawInf);
   } 
 
   headingNote.focus()
@@ -270,3 +231,5 @@ function onPageLoaded () {
 
 
 document.addEventListener('DOMContentLoaded', onPageLoaded);
+
+headingNote.focus()
