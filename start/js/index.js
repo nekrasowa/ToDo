@@ -1,6 +1,10 @@
 'use strict'
 
-import {getNotesFromLS} from './function.js'
+import {
+  getNotesFromLS,
+  doReadyStyle,
+  doNotReadyStyle
+} from './function.js'
 const headingNote = document.querySelector('.headingInput')
 
 function onPageLoaded () {
@@ -75,6 +79,10 @@ function onPageLoaded () {
     const newHeading = heading
     const newText = text
 
+    if (obj.ready == true) {
+      doReadyStyle(notesText, headingText, noteBlock)
+    }
+
     notes.appendChild(note)
     note.appendChild(noteBlock)
     noteBlock.appendChild(headingText)
@@ -104,20 +112,17 @@ function onPageLoaded () {
       
       const editedId = mainElem.getAttribute('id')
       editedNoteId = editedId.slice(5)
-      
-      // getInfFromLS(editedNoteId2); // TODO:
     });
 
     createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
       const readyKey = mainElem.getAttribute('id')
       const key = readyKey.slice(5)
       const inf = getInfFromLS(key)
+      const gray = 'rgb(131, 130, 133)'
+      const blue = 'rgb(114, 126, 153)'
 
-      if (notesText.style.backgroundColor !== 'rgb(131, 130, 133)') { 
-        notesText.style.backgroundColor = 'rgb(131, 130, 133)'
-        notesText.style.textDecoration = 'line-through'
-        headingText.style.textDecoration = 'line-through'
-        noteBlock.style.backgroundColor = 'rgb(131, 130, 133)'
+      if (notesText.style.backgroundColor !== gray) { 
+        doReadyStyle(notesText, headingText, noteBlock)
 
         inf.ready = true
         const infJSON = addToJSON(inf)
@@ -128,11 +133,7 @@ function onPageLoaded () {
         return
       }
 
-      notesText.style.backgroundColor = 'rgb(114, 126, 153)'
-      notesText.style.textDecoration = 'none'
-      headingText.style.backgroundColor = 'rgb(131, 130, 133)'
-      headingText.style.textDecoration = 'none'
-      noteBlock.style.backgroundColor = 'rgb(114, 126, 153)'
+      doNotReadyStyle(notesText, headingText, noteBlock)
 
       inf.ready = false
       const infJSON = addToJSON(inf)
