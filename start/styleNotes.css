@@ -17,7 +17,7 @@
   grid-template-areas: 
                       "noteBlock btnBlock"                      
                       ;
-  margin: 0% 0% 2%;
+  margin: 0% 0% 3% 2%;
 }
 
 .noteBlock {

@@ -20,4 +20,11 @@ body {
   background-color: dimgrey;
 }
 
+::-webkit-scrollbar {
+  width: 7px;
+}
 
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(100deg, rgb(41 81 171), rgb(84 15 15));
+}
