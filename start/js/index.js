@@ -1,10 +1,13 @@
 'use strict'
 
 import {
-  getNotesFromLS,
+  getNotesFromLS
+} from './function.js'
+
+import {
   applyReadyStyle,
   applyAnreadyStyle
-} from './function.js'
+} from './notesStyle.js'
 const headingNote = document.querySelector('.headingInput')
 
 function onPageLoaded () {
