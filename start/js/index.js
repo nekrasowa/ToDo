@@ -2,8 +2,8 @@
 
 import {
   getNotesFromLS,
-  doReadyStyle,
-  doNotReadyStyle
+  applyReadyStyle,
+  applyAnreadyStyle
 } from './function.js'
 const headingNote = document.querySelector('.headingInput')
 
@@ -118,11 +118,9 @@ function onPageLoaded () {
       const readyKey = mainElem.getAttribute('id')
       const key = readyKey.slice(5)
       const inf = getInfFromLS(key)
-      const gray = 'rgb(131, 130, 133)'
-      const blue = 'rgb(114, 126, 153)'
 
       if (notesText.style.backgroundColor !== gray) { 
-        doReadyStyle(notesText, headingText, noteBlock)
+        applyReadyStyle(notesText, headingText, noteBlock)
 
         inf.ready = true
         const infJSON = addToJSON(inf)
@@ -133,7 +131,7 @@ function onPageLoaded () {
         return
       }
 
-      doNotReadyStyle(notesText, headingText, noteBlock)
+      applyAnreadyStyle(notesText, headingText, noteBlock)
 
       inf.ready = false
       const infJSON = addToJSON(inf)

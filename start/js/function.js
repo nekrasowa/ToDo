@@ -43,7 +43,7 @@ export function getNotesFromLS() {
     return oldNotes
 }
 
-export function doReadyStyle(field1, field2, block) {
+export function applyReadyStyle(field1, field2, block) {
   const gray = 'rgb(131, 130, 133)'
 
   field1.style.backgroundColor = gray
@@ -52,7 +52,7 @@ export function doReadyStyle(field1, field2, block) {
   block.style.backgroundColor = gray
 }
 
-export function doNotReadyStyle(field1, field2, block) {
+export function applyAnreadyStyle(field1, field2, block) {
   const gray = 'rgb(131, 130, 133)'
   const blue = 'rgb(114, 126, 153)'
 
