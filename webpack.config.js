@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './start/js/index.js',
+  devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
@@ -12,11 +13,18 @@ module.exports = {
   ],
   module: {
     rules: [
-        {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: ['babel-loader'],
-        },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      },
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
+      },
     ],
-}
+  },
 };
