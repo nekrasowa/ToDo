@@ -87,6 +87,8 @@ async function onPageLoaded() {
       const newHeading = heading
       const newText = text
 
+      // TODO: func post to serv
+
       if (obj.ready == true) {
         doReadyStyle(notesText, headingText, noteBlock)
       }
@@ -103,8 +105,8 @@ async function onPageLoaded() {
         const deletedKey = mainElem.getAttribute('id')
         const id = deletedKey.slice(5)
 
-        localStorage.removeItem(id)
-        mainElem.remove()
+        // localStorage.removeItem(id)
+        // mainElem.remove()
       })
 
       createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
@@ -124,15 +126,15 @@ async function onPageLoaded() {
 
       createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
         const readyKey = mainElem.getAttribute('id')
-        const key = readyKey.slice(5)
-        const inf = getInfFromLS(key)
+        // const key = readyKey.slice(5)
+        // const inf = getInfFromLS(key)
 
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
 
-          inf.ready = true
-          const infJSON = addToJSON(inf)
-          saveInLocalStorage(key, infJSON)
+          // inf.ready = true
+          // const infJSON = addToJSON(inf)
+          // saveInLocalStorage(key, infJSON)
           clear()
           headingNote.focus()
           notes.scrollTop = notes.scrollHeight
@@ -141,9 +143,9 @@ async function onPageLoaded() {
 
         applyAnreadyStyle(notesText, headingText, noteBlock)
 
-        inf.ready = false
-        const infJSON = addToJSON(inf)
-        saveInLocalStorage(key, infJSON)
+        // inf.ready = false
+        // const infJSON = addToJSON(inf)
+        // saveInLocalStorage(key, infJSON)
 
         clear()
         headingNote.focus()
@@ -151,16 +153,16 @@ async function onPageLoaded() {
       })
 
 
-      const noteInJSON = addToJSON({
-        heading,
-        text,
-        ready
-      });
+      // const noteInJSON = addToJSON({
+      //   heading,
+      //   text,
+      //   ready
+      // });
 
-      const id = note.getAttribute('id')
-      const noteId = id.slice(5)
+      // const id = note.getAttribute('id')
+      // const noteId = id.slice(5)
 
-      saveInLocalStorage(noteId, noteInJSON)
+      // saveInLocalStorage(noteId, noteInJSON)
 
       clear()
       headingNote.focus()
@@ -190,11 +192,11 @@ async function onPageLoaded() {
       const currHeadingNote = elem.querySelector('.headingNote')
       currHeadingNote.textContent = headingNote.value
 
-      saveInLocalStorage(editedNoteId, JSON.stringify({
-        heading: headingNote.value,
-        text: newNote.value,
-        ready: false
-      }));
+      // saveInLocalStorage(editedNoteId, JSON.stringify({
+      //   heading: headingNote.value,
+      //   text: newNote.value,
+      //   ready: false
+      // }))
 
       clear();
 
@@ -219,19 +221,19 @@ async function onPageLoaded() {
     const edit = document.getElementById('editArea');
     edit.onclick = editNote;
 
-    function addToJSON(obj) {
-      return JSON.stringify(obj)
-    }
+    // function addToJSON(obj) {
+    //   return JSON.stringify(obj)
+    // }
 
-    function saveInLocalStorage(id, noteInJSON) {
-      localStorage.setItem(id, noteInJSON);
-    }
+    // function saveInLocalStorage(id, noteInJSON) {
+    //   localStorage.setItem(id, noteInJSON);
+    // }
 
-    function getInfFromLS(id) {
-      const rawInf = localStorage.getItem(id);
+    // function getInfFromLS(id) {
+    //   const rawInf = localStorage.getItem(id);
 
-      return JSON.parse(rawInf);
-    }
+    //   return JSON.parse(rawInf);
+    // }
 
     headingNote.focus()
   } catch (err) {
@@ -241,6 +243,7 @@ async function onPageLoaded() {
 
 document.addEventListener('DOMContentLoaded', () => {
   onPageLoaded()
+  headingNote.focus()
 });
 
-headingNote.focus()
+
