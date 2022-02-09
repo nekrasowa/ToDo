@@ -1,0 +1,30 @@
+body {
+  background-image: url(img/background.png);
+  background-attachment: fixed;
+  background-size: 100%;
+  
+}
+
+.main {
+  border: solid;
+  margin: 2% 33% 0 31%;
+
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+                     "notes"
+                     "createNote";
+  height: 93vh;
+  position: relative;
+  background-color: dimgrey;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(100deg, rgb(41 81 171), rgb(84 15 15));
+}
