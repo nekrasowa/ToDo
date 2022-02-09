@@ -1,0 +1,27 @@
+{
+  "name": "todo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "homepage": "https://github.com/nekrasowa/ToDo#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nekrasowa/ToDo.git"
+  },
+  "scripts": {
+    "start": "./app.js",
+    "startDev": "nodemon ./app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nekrasowa/ToDo/issues"
+  }
+}
