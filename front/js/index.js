@@ -1,6 +1,7 @@
 'use strict'
 import {
-  addArrOfOldNotes
+  addArrOfOldNotes,
+  addNewNote
 } from './request.js'
 
 // import {
@@ -59,19 +60,20 @@ async function onPageLoaded() {
       return `note-${noteId}`
     }
 
-    function createNote(obj, localKey) {
+    function createNote(obj) {
       const {
         heading = headingNote.value,
         text = newNote.value,
-        ready = false
+        ready = false,
+        id = id || createId()
       } = { ...obj }
 
       const note = document.createElement('div')
       note.classList.add('note')
-      const currKey = localKey
-        ? `note-${localKey}`
-        : createId()
-      note.setAttribute('id', currKey)
+      // const currKey = localKey
+      //   ? `note-${localKey}`
+      //   : createId()
+      note.setAttribute('id', id)
 
       const noteBlock = document.createElement('div')
       noteBlock.classList.add('noteBlock')
@@ -86,9 +88,6 @@ async function onPageLoaded() {
 
       const newHeading = heading
       const newText = text
-
-      console.log(obj)
-      // TODO: func post to serv
 
       if (ready == true) {
         doReadyStyle(notesText, headingText, noteBlock)
@@ -126,9 +125,10 @@ async function onPageLoaded() {
       });
 
       createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
-        const readyKey = mainElem.getAttribute('id')
+        // const readyKey = mainElem.getAttribute('id')
         // const key = readyKey.slice(5)
         // const inf = getInfFromLS(key)
+        const gray = 'rgb(131, 130, 133)'
 
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
@@ -170,7 +170,19 @@ async function onPageLoaded() {
       notes.scrollTop = notes.scrollHeight
 
       if (!obj) {
-        // TODO: send a POST request to the server
+        const objOfNote = {
+          heading,
+          text,
+          ready,
+          id
+          // heading = newHeading,
+          // text = newText,
+          // ready: false 
+        }
+        const JSONobjOfNote = JSON.stringify(objOfNote)
+        addNewNote(JSONobjOfNote)
+        console.log(JSONobjOfNote)
+
       }
     }
 
