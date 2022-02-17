@@ -1,7 +1,8 @@
 'use strict'
 import {
   addArrOfOldNotes,
-  addNewNote
+  addNewNote,
+  deleteNote
 } from './request.js'
 
 // import {
@@ -22,7 +23,8 @@ async function onPageLoaded() {
 
     const newNote = document.querySelector('.newNoteArea')
     const notes = document.querySelector('.notes')
-    const allIdSet = new Set([-1])
+    const allIdSet = new Set([1]) 
+    // TODO: изменить число на -1, когда не будет массива на сервере
     let editedNoteId
 
     oldNotesArr.forEach(createNote)
@@ -54,6 +56,7 @@ async function onPageLoaded() {
     function createId() {
       const maxId = Math.max(...allIdSet)
 
+      console.log(allIdSet)
       const noteId = maxId + 1
       allIdSet.add(noteId)
 
@@ -61,11 +64,12 @@ async function onPageLoaded() {
     }
 
     function createNote(obj) {
+      // console.log(obj.id)
       const {
         heading = headingNote.value,
         text = newNote.value,
         ready = false,
-        id = id || createId()
+        id = id ? id : createId()
       } = { ...obj }
 
       const note = document.createElement('div')
@@ -102,11 +106,13 @@ async function onPageLoaded() {
       notesText.append(newText)
 
       createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
-        const deletedKey = mainElem.getAttribute('id')
-        const id = deletedKey.slice(5)
+        const noteId = mainElem.getAttribute('id')
 
+        deleteNote(noteId)
+        // const deletedKey = mainElem.getAttribute('id')
+        // const id = deletedKey.slice(5)
         // localStorage.removeItem(id)
-        // mainElem.remove()
+        mainElem.remove()
       })
 
       createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
@@ -179,9 +185,9 @@ async function onPageLoaded() {
           // text = newText,
           // ready: false 
         }
-        const JSONobjOfNote = JSON.stringify(objOfNote)
-        addNewNote(JSONobjOfNote)
-        console.log(JSONobjOfNote)
+        // const JSONobjOfNote = JSON.stringify(objOfNote)
+        addNewNote(objOfNote)
+        // console.log(JSONobjOfNote)
 
       }
     }
