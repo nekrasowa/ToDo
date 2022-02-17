@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const port = 4000
+const getElemByID = require("./getElemByID")
 
 const oldNotesArr = [
   {
@@ -25,10 +26,8 @@ app.get('/', function(req, res) {
   res.json(oldNotesArr)
 })
 
-app.post('/', function(req, res) {
+app.post('/add', function(req, res) {
   try {
-    console.log('[POST-/]:', req.body)
-  
     oldNotesArr.push(req.body)
 
     console.log(`Note is added!`)
@@ -40,6 +39,25 @@ app.post('/', function(req, res) {
     res.json({ isOk: false })
   }
 })
+
+app.delete('/delete', function(req, res) {
+  try {
+    console.log('[/delete]')
+
+    const indexOfDeletedNote = getElemByID(oldNotesArr, req.body.noteId)
+
+    if (indexOfDeletedNote === -1) {
+      res.status(400)
+      res.json({ isOk: false })
+    }
+
+    oldNotesArr.splice(indexOfDeletedNote, 1)
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
 
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
