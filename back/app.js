@@ -70,28 +70,7 @@ app.put('/status/false', function(req, res) {
       res.json({ isOk: false })
     }
     
-    oldNotesArr[indexOfChangedNote].ready = false
-    console.log('[obj]:', oldNotesArr[indexOfChangedNote])
-    res.json({ isOk: true })
-  } catch (err) {
-    res.status(500)
-    res.json({ isOk: false })
-  }
-})
-
-app.put('/status/true', function(req, res) {
-  try {
-    console.log('[/status/true]')
-
-    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
-
-    if (indexOfChangedNote === -1) {
-      res.status(400)
-      res.json({ isOk: false })
-    }
-    
-    oldNotesArr[indexOfChangedNote].ready = true
-    
+    oldNotesArr[indexOfChangedNote].ready = req.body.status
     console.log('[obj]:', oldNotesArr[indexOfChangedNote])
     res.json({ isOk: true })
   } catch (err) {
