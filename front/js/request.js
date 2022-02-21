@@ -1,19 +1,21 @@
 'use strict'
 
-const port = new URL('http://localhost:4000')
-const addPort = new URL('/add', port)
-const deletePort = new URL('/delete', port)
-console.log('[deletePort]:', deletePort.toString())
+const url = new URL('http://localhost:4000')
+const addURL = new URL('/add', url)
+const deleteURL = new URL('/delete', url)
+const statusURLFalse = new URL('/status/false', url)
+const statusURLTrue = new URL('/status/true', url)
+
+console.log('[deleteURL]:', deleteURL.toString())
 
 export function addArrOfOldNotes() {
-  return fetch(port)
+  return fetch(url)
     .then((response) => response.json())
 }
 
 export function addNewNote(JSONobjOfNote) {
-  return fetch(addPort, {
+  return fetch(addURL, {
     method: 'POST',
-    // url: port,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -24,10 +26,32 @@ export function addNewNote(JSONobjOfNote) {
 }
 
 export function deleteNote(noteId) {
-  console.log('[noteId]:', noteId)
-  return fetch(deletePort, {
+  return fetch(deleteURL, {
     method: 'DELETE',
-    // url: port,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ noteId }), 
+  })
+  .then((response) => response.json())
+}
+
+export function changeStatusOnFalse(noteId) {
+  return fetch(statusURLFalse, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ noteId }), 
+  })
+  .then((response) => response.json())
+}
+
+export function changeStatusOnTrue(noteId) {
+  return fetch(statusURLTrue, {
+    method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

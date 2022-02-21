@@ -2,7 +2,9 @@
 import {
   addArrOfOldNotes,
   addNewNote,
-  deleteNote
+  deleteNote,
+  changeStatusOnFalse,
+  changeStatusOnTrue
 } from './request.js'
 
 // import {
@@ -94,7 +96,7 @@ async function onPageLoaded() {
       const newText = text
 
       if (ready == true) {
-        doReadyStyle(notesText, headingText, noteBlock)
+        applyReadyStyle(notesText, headingText, noteBlock)
       }
 
       notes.appendChild(note)
@@ -131,7 +133,8 @@ async function onPageLoaded() {
       });
 
       createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
-        // const readyKey = mainElem.getAttribute('id')
+        const readyKey = mainElem.getAttribute('id')
+
         // const key = readyKey.slice(5)
         // const inf = getInfFromLS(key)
         const gray = 'rgb(131, 130, 133)'
@@ -139,16 +142,17 @@ async function onPageLoaded() {
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
 
+          changeStatusOnTrue(readyKey)
           // inf.ready = true
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
           clear()
           headingNote.focus()
-          notes.scrollTop = notes.scrollHeight
           return
         }
-
+        changeStatusOnFalse(readyKey)
         applyAnreadyStyle(notesText, headingText, noteBlock)
+
 
         // inf.ready = false
         // const infJSON = addToJSON(inf)
@@ -156,7 +160,6 @@ async function onPageLoaded() {
 
         clear()
         headingNote.focus()
-        notes.scrollTop = notes.scrollHeight
       })
 
 
