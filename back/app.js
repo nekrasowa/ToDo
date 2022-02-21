@@ -52,12 +52,53 @@ app.delete('/delete', function(req, res) {
     }
 
     oldNotesArr.splice(indexOfDeletedNote, 1)
+    res.json({ isOk: true })
   } catch (err) {
     res.status(500)
     res.json({ isOk: false })
   }
 })
 
+app.put('/status/false', function(req, res) {
+  try {
+    console.log('[/status/false]')
+
+    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+
+    if (indexOfChangedNote === -1) {
+      res.status(400)
+      res.json({ isOk: false })
+    }
+    
+    oldNotesArr[indexOfChangedNote].ready = false
+    console.log('[obj]:', oldNotesArr[indexOfChangedNote])
+    res.json({ isOk: true })
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
+app.put('/status/true', function(req, res) {
+  try {
+    console.log('[/status/true]')
+
+    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+
+    if (indexOfChangedNote === -1) {
+      res.status(400)
+      res.json({ isOk: false })
+    }
+    
+    oldNotesArr[indexOfChangedNote].ready = true
+    
+    console.log('[obj]:', oldNotesArr[indexOfChangedNote])
+    res.json({ isOk: true })
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
 
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
