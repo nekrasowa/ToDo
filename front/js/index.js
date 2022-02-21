@@ -3,8 +3,7 @@ import {
   addArrOfOldNotes,
   addNewNote,
   deleteNote,
-  changeStatusOnFalse,
-  changeStatusOnTrue
+  changeStatus
 } from './request.js'
 
 // import {
@@ -142,7 +141,7 @@ async function onPageLoaded() {
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
 
-          changeStatusOnTrue(readyKey)
+          changeStatus(readyKey, true)
           // inf.ready = true
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
@@ -150,7 +149,7 @@ async function onPageLoaded() {
           headingNote.focus()
           return
         }
-        changeStatusOnFalse(readyKey)
+        changeStatus(readyKey, false)
         applyAnreadyStyle(notesText, headingText, noteBlock)
 
 

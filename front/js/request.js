@@ -37,26 +37,14 @@ export function deleteNote(noteId) {
   .then((response) => response.json())
 }
 
-export function changeStatusOnFalse(noteId) {
+export function changeStatus(noteId, status) {
   return fetch(statusURLFalse, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ noteId }), 
-  })
-  .then((response) => response.json())
-}
-
-export function changeStatusOnTrue(noteId) {
-  return fetch(statusURLTrue, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ noteId }), 
+    body: JSON.stringify({ noteId, status }), 
   })
   .then((response) => response.json())
 }
