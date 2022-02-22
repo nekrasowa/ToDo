@@ -49,6 +49,8 @@ app.delete('/delete', function(req, res) {
     if (indexOfDeletedNote === -1) {
       res.status(400)
       res.json({ isOk: false })
+
+      return
     }
 
     oldNotesArr.splice(indexOfDeletedNote, 1)
@@ -59,19 +61,46 @@ app.delete('/delete', function(req, res) {
   }
 })
 
-app.put('/status/false', function(req, res) {
+app.put('/changeStatus', function(req, res) {
   try {
-    console.log('[/status/false]')
+    console.log('[/changeStatus]')
 
     const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
 
     if (indexOfChangedNote === -1) {
       res.status(400)
       res.json({ isOk: false })
+
+      return
     }
     
     oldNotesArr[indexOfChangedNote].ready = req.body.status
     console.log('[obj]:', oldNotesArr[indexOfChangedNote])
+
+    res.json({ isOk: true })
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
+app.put('/saveChanges', function(req, res) {
+  try {
+    console.log('[/saveChanges]')
+    
+    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+
+    if (indexOfChangedNote === -1) {
+      res.status(400)
+      res.json({ isOk: false })
+
+      return
+    }
+    
+    oldNotesArr[indexOfChangedNote] = req.body.obj
+    console.log('[/oldNotesArr[indexOfChangedNote]:', oldNotesArr[indexOfChangedNote])
+    console.log('[arr]:', oldNotesArr)
+
     res.json({ isOk: true })
   } catch (err) {
     res.status(500)
