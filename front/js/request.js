@@ -3,8 +3,9 @@
 const url = new URL('http://localhost:4000')
 const addURL = new URL('/add', url)
 const deleteURL = new URL('/delete', url)
-const statusURLFalse = new URL('/status/false', url)
-const statusURLTrue = new URL('/status/true', url)
+const statusURL = new URL('/changeStatus', url)
+const changesURL = new URL('/saveChanges', url)
+
 
 console.log('[deleteURL]:', deleteURL.toString())
 
@@ -38,13 +39,25 @@ export function deleteNote(noteId) {
 }
 
 export function changeStatus(noteId, status) {
-  return fetch(statusURLFalse, {
+  return fetch(statusURL, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ noteId, status }), 
+  })
+  .then((response) => response.json())
+}
+
+export function saveChanges(noteId, obj) {
+  return fetch(changesURL, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ noteId, obj }), 
   })
   .then((response) => response.json())
 }

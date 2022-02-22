@@ -3,7 +3,8 @@ import {
   addArrOfOldNotes,
   addNewNote,
   deleteNote,
-  changeStatus
+  changeStatus,
+  saveChanges
 } from './request.js'
 
 // import {
@@ -26,7 +27,8 @@ async function onPageLoaded() {
     const notes = document.querySelector('.notes')
     const allIdSet = new Set([1]) 
     // TODO: изменить число на -1, когда не будет массива на сервере
-    let editedNoteId
+    // let editedNoteId
+    let editedId
 
     oldNotesArr.forEach(createNote)
 
@@ -127,8 +129,8 @@ async function onPageLoaded() {
         const btnAdd = document.getElementById('addArea')
         btnAdd.style.display = 'none'
 
-        const editedId = mainElem.getAttribute('id')
-        editedNoteId = editedId.slice(5)
+        editedId = mainElem.getAttribute('id')
+        // editedNoteId = editedId.slice(5)
       });
 
       createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
@@ -200,9 +202,7 @@ async function onPageLoaded() {
       const btnAdd = document.getElementById('addArea')
       btnAdd.style.display = 'block'
 
-      const elem = document.getElementById(`note-${editedNoteId}`)
-      console.log(typeof editedNoteId)
-      console.log(elem)
+      const elem = document.getElementById(editedId)
 
       if (elem === null) {
         btnEdit.style.display = 'none'
@@ -216,6 +216,13 @@ async function onPageLoaded() {
 
       const currHeadingNote = elem.querySelector('.headingNote')
       currHeadingNote.textContent = headingNote.value
+
+      saveChanges(editedId, {
+          heading: headingNote.value,
+          text: newNote.value,
+          ready: false,
+          id: editedId
+        })
 
       // saveInLocalStorage(editedNoteId, JSON.stringify({
       //   heading: headingNote.value,
