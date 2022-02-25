@@ -4,12 +4,18 @@ import {
   addNewNote,
   deleteNote,
   changeStatus,
-  saveChanges
+  saveChanges,
+  getStatus
 } from './request.js'
 
 // import {
 //   getNotesFromLS
 // } from './function.js'
+
+import {
+  locedBtn
+} from './locedBtn.js'
+
 
 import {
   applyReadyStyle,
@@ -41,6 +47,7 @@ async function onPageLoaded() {
       const elem = document.createElement('div')
       elem.classList.add(name)
       elem.classList.add(blacklight)
+      elem.classList.add('cursor')
 
       const srcSVG = `img/${name}.svg`
       const iconElem = new Image
@@ -52,6 +59,7 @@ async function onPageLoaded() {
       elem.appendChild(iconElem)
 
       elem.onclick = () => {
+        locedBtn(elem, )
         cb(div)
       }
     }
@@ -71,7 +79,7 @@ async function onPageLoaded() {
       const {
         heading = headingNote.value,
         text = newNote.value,
-        ready = false,
+        ready = 'false',
         id = id ? id : createId()
       } = { ...obj }
 
@@ -96,7 +104,7 @@ async function onPageLoaded() {
       const newHeading = heading
       const newText = text
 
-      if (ready == true) {
+      if (ready == 'true') {
         applyReadyStyle(notesText, headingText, noteBlock)
       }
 
@@ -110,7 +118,6 @@ async function onPageLoaded() {
 
       createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
         const noteId = mainElem.getAttribute('id')
-
         deleteNote(noteId)
         // const deletedKey = mainElem.getAttribute('id')
         // const id = deletedKey.slice(5)
@@ -143,17 +150,16 @@ async function onPageLoaded() {
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
 
-          changeStatus(readyKey, true)
+          changeStatus(readyKey, 'true')
           // inf.ready = true
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
           clear()
           headingNote.focus()
-          return
+          return 
         }
-        changeStatus(readyKey, false)
+        changeStatus(readyKey, 'false')
         applyAnreadyStyle(notesText, headingText, noteBlock)
-
 
         // inf.ready = false
         // const infJSON = addToJSON(inf)
@@ -217,10 +223,14 @@ async function onPageLoaded() {
       const currHeadingNote = elem.querySelector('.headingNote')
       currHeadingNote.textContent = headingNote.value
 
+      const statusNote = getStatus(editedId)
+      console.log('[statusNote]', statusNote, typeof statusNote)
+
+
       saveChanges(editedId, {
           heading: headingNote.value,
           text: newNote.value,
-          ready: false,
+          ready: statusNote,
           id: editedId
         })
 

@@ -4,10 +4,8 @@ const url = new URL('http://localhost:4000')
 const addURL = new URL('/add', url)
 const deleteURL = new URL('/delete', url)
 const statusURL = new URL('/changeStatus', url)
+const getStatusURL = new URL('/getStatus', url)
 const changesURL = new URL('/saveChanges', url)
-
-
-console.log('[deleteURL]:', deleteURL.toString())
 
 export function addArrOfOldNotes() {
   return fetch(url)
@@ -58,6 +56,18 @@ export function saveChanges(noteId, obj) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ noteId, obj }), 
+  })
+  .then((response) => response.json())
+}
+
+export function getStatus(noteId) {
+  return fetch(getStatusURL, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ noteId }), 
   })
   .then((response) => response.json())
 }
