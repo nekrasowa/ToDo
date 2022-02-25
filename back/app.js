@@ -8,13 +8,13 @@ const oldNotesArr = [
   {
     heading: 'Первая', 
     text: 'и текст', 
-    ready: false,
+    ready: 'false',
     id: 'note-0' 
   },
   {
     heading: 'Вторая', 
     text: 'И ее текст', 
-    ready: false,
+    ready: 'false',
     id: 'note-1'
   }
 ]
@@ -30,9 +30,6 @@ app.post('/add', function(req, res) {
   try {
     oldNotesArr.push(req.body)
 
-    console.log(`Note is added!`)
-    console.log(oldNotesArr)
-
     res.json({ isOk: true })
   } catch (err) {
     res.status(500)
@@ -42,8 +39,6 @@ app.post('/add', function(req, res) {
 
 app.delete('/delete', function(req, res) {
   try {
-    console.log('[/delete]')
-
     const indexOfDeletedNote = getElemByID(oldNotesArr, req.body.noteId)
 
     if (indexOfDeletedNote === -1) {
@@ -63,8 +58,6 @@ app.delete('/delete', function(req, res) {
 
 app.put('/changeStatus', function(req, res) {
   try {
-    console.log('[/changeStatus]')
-
     const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
 
     if (indexOfChangedNote === -1) {
@@ -75,7 +68,6 @@ app.put('/changeStatus', function(req, res) {
     }
     
     oldNotesArr[indexOfChangedNote].ready = req.body.status
-    console.log('[obj]:', oldNotesArr[indexOfChangedNote])
 
     res.json({ isOk: true })
   } catch (err) {
@@ -84,10 +76,23 @@ app.put('/changeStatus', function(req, res) {
   }
 })
 
+app.put('/getStatus', function(req, res) {
+  try {
+    
+    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+
+    const status = oldNotesArr[indexOfChangedNote].ready
+    console.log('[oldNotesArr]', oldNotesArr)
+    
+    res.json( {status: status} )
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
 app.put('/saveChanges', function(req, res) {
   try {
-    console.log('[/saveChanges]')
-    
     const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
 
     if (indexOfChangedNote === -1) {
@@ -98,9 +103,7 @@ app.put('/saveChanges', function(req, res) {
     }
     
     oldNotesArr[indexOfChangedNote] = req.body.obj
-    console.log('[/oldNotesArr[indexOfChangedNote]:', oldNotesArr[indexOfChangedNote])
-    console.log('[arr]:', oldNotesArr)
-
+    
     res.json({ isOk: true })
   } catch (err) {
     res.status(500)
