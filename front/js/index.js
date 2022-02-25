@@ -59,7 +59,7 @@ async function onPageLoaded() {
       elem.appendChild(iconElem)
 
       elem.onclick = () => {
-        locedBtn(elem, )
+        locedBtn(elem, blacklight)
         cb(div)
       }
     }
