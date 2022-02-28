@@ -4,7 +4,7 @@ const url = new URL('http://localhost:4000')
 const addURL = new URL('/add', url)
 const deleteURL = new URL('/delete', url)
 const statusURL = new URL('/changeStatus', url)
-const getStatusURL = new URL('/getStatus', url)
+// const getStatusURL = new URL('/getStatus', url)
 const changesURL = new URL('/saveChanges', url)
 
 export function addArrOfOldNotes() {
@@ -61,13 +61,11 @@ export function saveChanges(noteId, obj) {
 }
 
 export function getStatus(noteId) {
-  return fetch(getStatusURL, {
-    method: 'PUT',
+  return fetch(`http://localhost:4000/getStatus?noteId=${noteId}`, {
+    method: 'GET',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ noteId }), 
+      'Accept': 'application/json'
+    }
   })
   .then((response) => response.json())
 }

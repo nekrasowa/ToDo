@@ -59,7 +59,7 @@ async function onPageLoaded() {
       elem.appendChild(iconElem)
 
       elem.onclick = () => {
-        locedBtn(elem, blacklight)
+        // locedBtn(elem, blacklight)
         cb(div)
       }
     }
@@ -79,7 +79,7 @@ async function onPageLoaded() {
       const {
         heading = headingNote.value,
         text = newNote.value,
-        ready = 'false',
+        ready = false,
         id = id ? id : createId()
       } = { ...obj }
 
@@ -104,7 +104,7 @@ async function onPageLoaded() {
       const newHeading = heading
       const newText = text
 
-      if (ready == 'true') {
+      if (ready == true) {
         applyReadyStyle(notesText, headingText, noteBlock)
       }
 
@@ -150,7 +150,7 @@ async function onPageLoaded() {
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
 
-          changeStatus(readyKey, 'true')
+          changeStatus(readyKey, true)
           // inf.ready = true
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
@@ -158,7 +158,7 @@ async function onPageLoaded() {
           headingNote.focus()
           return 
         }
-        changeStatus(readyKey, 'false')
+        changeStatus(readyKey, false)
         applyAnreadyStyle(notesText, headingText, noteBlock)
 
         // inf.ready = false
@@ -202,47 +202,65 @@ async function onPageLoaded() {
       }
     }
 
-    function editNote() {
-      const btnEdit = document.getElementById('editArea')
-      btnEdit.style.display = 'none'
-      const btnAdd = document.getElementById('addArea')
-      btnAdd.style.display = 'block'
-
-      const elem = document.getElementById(editedId)
-
-      if (elem === null) {
+    async function editNote() {
+      try {
+        const btnEdit = document.getElementById('editArea')
         btnEdit.style.display = 'none'
+        const btnAdd = document.getElementById('addArea')
         btnAdd.style.display = 'block'
+  
+        const elem = document.getElementById(editedId)
+  
+        if (elem === null) {
+          btnEdit.style.display = 'none'
+          btnAdd.style.display = 'block'
+  
+          return
+        }
+  
+        const currEditNote = elem.querySelector('.notesText')
+        currEditNote.textContent = newNote.value
+  
+        const currHeadingNote = elem.querySelector('.headingNote')
+        currHeadingNote.textContent = headingNote.value
+  
+        const {
+          status,
+          isOk
+        } = await getStatus(editedId)
 
-        return
+        if (!isOk) {
+          throw new Error('ERR_editNote')
+        }
+        // statusNote
+        //   .then((result) => {
+        //     console.log('[res-in-promise]', result, typeof result)
+        //     return result
+        //   })
+        //   .catch((e) => { console.error(e) })    
+  
+          console.log('[status]', status, typeof status)
+  
+  
+        await saveChanges(editedId, {
+            heading: headingNote.value,
+            text: newNote.value,
+            ready: status,
+            id: editedId
+          })
+  
+        // saveInLocalStorage(editedNoteId, JSON.stringify({
+        //   heading: headingNote.value,
+        //   text: newNote.value,
+        //   ready: false
+        // }))
+  
+        clear();
+  
+        headingNote.focus();
+      } catch (err) {
+        console.error(err)
       }
-
-      const currEditNote = elem.querySelector('.notesText')
-      currEditNote.textContent = newNote.value
-
-      const currHeadingNote = elem.querySelector('.headingNote')
-      currHeadingNote.textContent = headingNote.value
-
-      const statusNote = getStatus(editedId)
-      console.log('[statusNote]', statusNote, typeof statusNote)
-
-
-      saveChanges(editedId, {
-          heading: headingNote.value,
-          text: newNote.value,
-          ready: statusNote,
-          id: editedId
-        })
-
-      // saveInLocalStorage(editedNoteId, JSON.stringify({
-      //   heading: headingNote.value,
-      //   text: newNote.value,
-      //   ready: false
-      // }))
-
-      clear();
-
-      headingNote.focus();
     }
 
     const add = document.getElementById('addArea');
@@ -286,6 +304,7 @@ async function onPageLoaded() {
 document.addEventListener('DOMContentLoaded', () => {
   onPageLoaded()
   headingNote.focus()
+
 });
 
 
