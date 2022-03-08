@@ -8,7 +8,7 @@ const oldNotesArr = [
   {
     heading: 'Первая', 
     text: 'и текст', 
-    ready: false,
+    ready: true,
     id: 'note-0' 
   },
   {
@@ -76,30 +76,30 @@ app.put('/changeStatus', function(req, res) {
   }
 })
 
-app.get('/getStatus', function(req, res) {
-  try {
-    console.log("noteId", req.query.noteId)
-    const indexOfChangedNote = getElemByID(oldNotesArr, req.query.noteId)
+// app.get('/getStatus', function(req, res) {
+//   try {
+//     console.log("noteId", req.query.noteId)
+//     const indexOfChangedNote = getElemByID(oldNotesArr, req.query.noteId)
     
-    if (indexOfChangedNote === -1) {
-      res.status(400)
-      res.json({ isOk: false })
+//     if (indexOfChangedNote === -1) {
+//       res.status(400)
+//       res.json({ isOk: false })
 
-      return
-    }
+//       return
+//     }
 
-    console.log('[indexOfChangedNote]', indexOfChangedNote)
-    console.log('[oldNotesArr]', oldNotesArr)
+//     console.log('[indexOfChangedNote]', indexOfChangedNote)
+//     console.log('[oldNotesArr]', oldNotesArr)
 
-    const status = oldNotesArr[indexOfChangedNote].ready
-    console.log('[status]', status, typeof status)
+//     const status = oldNotesArr[indexOfChangedNote].ready
+//     console.log('[status]', status, typeof status)
     
-    res.json({ status, isOk: true })
-  } catch (err) {
-    res.status(500)
-    res.json({ isOk: false })
-  }
-})
+//     res.json({ status, isOk: true })
+//   } catch (err) {
+//     res.status(500)
+//     res.json({ isOk: false })
+//   }
+// })
 
 // app.put('/getStatus', function(req, res) {
 //   try {
@@ -129,6 +129,7 @@ app.put('/saveChanges', function(req, res) {
     }
     
     oldNotesArr[indexOfChangedNote] = req.body.obj
+    console.log('[oldNotesArr[indexOfChangedNote]', req.body.obj)
     
     res.json({ isOk: true })
   } catch (err) {
