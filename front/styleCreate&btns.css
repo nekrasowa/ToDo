@@ -25,7 +25,9 @@
 
 .del, .edit, .ready, .add {
   margin: auto;
+  /* display: grid; */
 }
+
 .cursor {
   cursor: pointer;
 }
@@ -50,7 +52,6 @@
 .btnBlock {
   display: flex;
   flex-direction: column;
-  /* cursor: pointer; */
 }
 input[type="text"]::placeholder, textarea::placeholder { 
   color: #2a2c36; 
@@ -64,8 +65,41 @@ input[type="text"]::placeholder, textarea::placeholder {
 .blacklighRed:hover {
   box-shadow: 0 0 7px 1px #ffa7a7;
 }
-.locedBtn {
-  /* pointer-events: none; */
-  cursor: progress;
+
+.block {
+  /* grid-area: 1 / 1 / 1 / 1 ; */
+  width: 50px;
+  height: 50px;
+  cursor: wait;
+  background: rgba(124, 58, 58, 0.5);
   box-shadow: 0 0 9px 1px #511fc4;
+  /* pointer-events: auto;
+  pointer-events: initial; */
+}
+
+.cssload-container {
+  position: absolute;
+  left: 19%;
+  top: 20%;
+  width: 20px;
+  height: 20px;
+	text-align: center;
+  cursor: wait;
+}
+
+.cssload-crazy-arrow {
+	width: 20px;
+  height: 20px;
+  cursor: wait;
+	margin: 0 auto;
+	border: 5px solid;
+	border-top-left-radius: 50%;
+	border-bottom-right-radius: 50%;
+	border-bottom-left-radius: 50%;
+	border-color: rgb(31, 14, 107);
+	animation: cssload-spin 600ms infinite linear;
+}
+
+@keyframes cssload-spin {
+	100%{ transform: rotate(360deg); transform: rotate(360deg); }
 }

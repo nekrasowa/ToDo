@@ -60,12 +60,12 @@ export function saveChanges(noteId, obj) {
   .then((response) => response.json())
 }
 
-export function getStatus(noteId) {
-  return fetch(`http://localhost:4000/getStatus?noteId=${noteId}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
-  .then((response) => response.json())
-}
+// export function getStatus(noteId) {
+//   return fetch(`http://localhost:4000/getStatus?noteId=${noteId}`, {
+//     method: 'GET',
+//     headers: {
+//       'Accept': 'application/json'
+//     }
+//   })
+//   .then((response) => response.json())
+// }

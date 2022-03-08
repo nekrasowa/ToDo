@@ -5,7 +5,7 @@ import {
   deleteNote,
   changeStatus,
   saveChanges,
-  getStatus
+  // getStatus
 } from './request.js'
 
 // import {
@@ -44,10 +44,20 @@ async function onPageLoaded() {
     }
 
     function createBtn(div, mainElem, name, blacklight, cb) {
-      const elem = document.createElement('div')
-      elem.classList.add(name)
-      elem.classList.add(blacklight)
-      elem.classList.add('cursor')
+      const btn = document.createElement('div')
+      btn.classList.add(name)
+      btn.classList.add(blacklight)
+      btn.classList.add('cursor')
+      btn.style.display = 'grid'
+
+      const btnBlocked = document.createElement('div')
+      btnBlocked.classList.add(name, 'block')
+      btnBlocked.style.display = 'none'
+
+      const cssloadСontainer = document.createElement('div')
+      cssloadСontainer.classList.add('cssload-container')
+      const cssloadCrazyArrow = document.createElement('div')
+      cssloadCrazyArrow.classList.add('cssload-crazy-arrow')
 
       const srcSVG = `img/${name}.svg`
       const iconElem = new Image
@@ -55,11 +65,14 @@ async function onPageLoaded() {
       iconElem.classList.add('icon', `${name}-img`)
       iconElem.setAttribute('alt', `${name}Icon`)
 
-      mainElem.appendChild(elem)
-      elem.appendChild(iconElem)
+      mainElem.appendChild(btn)
+      btn.appendChild(btnBlocked)
+      btn.appendChild(iconElem)
+      btnBlocked.appendChild(cssloadСontainer)
+      cssloadСontainer.appendChild(cssloadCrazyArrow)
 
-      elem.onclick = () => {
-        // locedBtn(elem, blacklight)
+      btn.onclick = () => {
+        locedBtn(btn, blacklight, btnBlocked)
         cb(div)
       }
     }
@@ -118,6 +131,7 @@ async function onPageLoaded() {
 
       createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
         const noteId = mainElem.getAttribute('id')
+
         deleteNote(noteId)
         // const deletedKey = mainElem.getAttribute('id')
         // const id = deletedKey.slice(5)
@@ -149,6 +163,7 @@ async function onPageLoaded() {
 
         if (notesText.style.backgroundColor !== gray) {
           applyReadyStyle(notesText, headingText, noteBlock)
+          mainElem.classList.add('status-ready')
 
           changeStatus(readyKey, true)
           // inf.ready = true
@@ -160,6 +175,8 @@ async function onPageLoaded() {
         }
         changeStatus(readyKey, false)
         applyAnreadyStyle(notesText, headingText, noteBlock)
+        mainElem.classList.remove('status-ready')
+
 
         // inf.ready = false
         // const infJSON = addToJSON(inf)
@@ -168,7 +185,6 @@ async function onPageLoaded() {
         clear()
         headingNote.focus()
       })
-
 
       // const noteInJSON = addToJSON({
       //   heading,
@@ -202,53 +218,58 @@ async function onPageLoaded() {
       }
     }
 
-    async function editNote() {
+    // async function editNote() {
+    function editNote() {
       try {
         const btnEdit = document.getElementById('editArea')
         btnEdit.style.display = 'none'
         const btnAdd = document.getElementById('addArea')
         btnAdd.style.display = 'block'
   
-        const elem = document.getElementById(editedId)
+        const btn = document.getElementById(editedId)
   
-        if (elem === null) {
+        if (btn === null) {
           btnEdit.style.display = 'none'
           btnAdd.style.display = 'block'
-  
           return
         }
   
-        const currEditNote = elem.querySelector('.notesText')
+        const currEditNote = btn.querySelector('.notesText')
         currEditNote.textContent = newNote.value
   
-        const currHeadingNote = elem.querySelector('.headingNote')
+        const currHeadingNote = btn.querySelector('.headingNote')
         currHeadingNote.textContent = headingNote.value
-  
-        const {
-          status,
-          isOk
-        } = await getStatus(editedId)
 
-        if (!isOk) {
-          throw new Error('ERR_editNote')
+        function getStatus(btn) {
+          if (btn.classList.contains('status-ready') == true) {
+            return true
+          }
+          return false
         }
-        // statusNote
-        //   .then((result) => {
-        //     console.log('[res-in-promise]', result, typeof result)
-        //     return result
-        //   })
-        //   .catch((e) => { console.error(e) })    
+        const status = getStatus(btn)
+        // const {
+        //   status,
+        //   isOk
+        // } = await getStatus(editedId)
+
+        // if (!isOk) {
+        //   throw new Error('ERR_editNote')
+        // } 
   
-          console.log('[status]', status, typeof status)
+        console.log('[status]', status, typeof status)
+      
+        saveChanges(editedId, {
+        // await saveChanges(editedId, {
+          heading: headingNote.value,
+          text: newNote.value,
+          ready: status,
+          id: editedId
+        })
   
-  
-        await saveChanges(editedId, {
-            heading: headingNote.value,
-            text: newNote.value,
-            ready: status,
-            id: editedId
-          })
-  
+        console.log('[status]', getStatus(btn))
+        console.log('[btn]', btn)
+
+
         // saveInLocalStorage(editedNoteId, JSON.stringify({
         //   heading: headingNote.value,
         //   text: newNote.value,
