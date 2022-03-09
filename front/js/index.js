@@ -45,13 +45,13 @@ async function onPageLoaded() {
 
     function createBtn(div, mainElem, name, blacklight, cb) {
       const btn = document.createElement('div')
-      btn.classList.add(name)
+      btn.classList.add('btn', name)
       btn.classList.add(blacklight)
       btn.classList.add('cursor')
       btn.style.display = 'grid'
 
       const btnBlocked = document.createElement('div')
-      btnBlocked.classList.add(name, 'block')
+      btnBlocked.classList.add('btn', name, 'block')
       btnBlocked.style.display = 'none'
 
       const cssloadСontainer = document.createElement('div')
