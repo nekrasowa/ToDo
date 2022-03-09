@@ -1,6 +1,6 @@
 'use strict'
 
-export function locedBtn(btn, blacklight, btnBlocked) {
+export function lockedBtn(btn, blacklight, btnBlocked) {
   btn.classList.remove('cursor')
   btn.classList.remove(blacklight)
   btn.onclick = null
@@ -13,4 +13,7 @@ export function locedBtn(btn, blacklight, btnBlocked) {
   for (const item of blockedBtn) {
     item.style.pointerEvents = 'none'
   }
+
+  const btnAdd = document.getElementById('addArea')
+  btnAdd.style.pointerEvents = 'none'
 }

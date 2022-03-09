@@ -13,8 +13,8 @@ import {
 // } from './function.js'
 
 import {
-  locedBtn
-} from './locedBtn.js'
+  lockedBtn
+} from './lockedBtn.js'
 
 
 import {
@@ -72,7 +72,7 @@ async function onPageLoaded() {
       cssloadСontainer.appendChild(cssloadCrazyArrow)
 
       btn.onclick = () => {
-        locedBtn(btn, blacklight, btnBlocked)
+        lockedBtn(btn, blacklight, btnBlocked)
         cb(div)
       }
     }
