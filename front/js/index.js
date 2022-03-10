@@ -72,7 +72,7 @@ async function onPageLoaded() {
       cssloadСontainer.appendChild(cssloadCrazyArrow)
 
       btn.onclick = () => {
-        lockedBtn(btn, blacklight, btnBlocked)
+        // lockedBtn(btn, blacklight, btnBlocked)
         cb(div)
       }
     }
@@ -131,8 +131,12 @@ async function onPageLoaded() {
 
       createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
         const noteId = mainElem.getAttribute('id')
+        const btn = mainElem.getElementsByClassName('btn del blacklighRed')
+        const btnBlocked = mainElem.getElementsByClassName('btn del block')
 
-        deleteNote(noteId)
+        deleteNote(noteId)        
+        lockedBtn(btn[0], 'blacklighRed', btnBlocked[0])
+
         // const deletedKey = mainElem.getAttribute('id')
         // const id = deletedKey.slice(5)
         // localStorage.removeItem(id)
@@ -156,7 +160,7 @@ async function onPageLoaded() {
 
       createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
         const readyKey = mainElem.getAttribute('id')
-
+        
         // const key = readyKey.slice(5)
         // const inf = getInfFromLS(key)
         const gray = 'rgb(131, 130, 133)'
@@ -166,6 +170,12 @@ async function onPageLoaded() {
           mainElem.classList.add('status-ready')
 
           changeStatus(readyKey, true)
+          
+          const btn = mainElem.getElementsByClassName('btn ready blacklighGreen')
+          const btnBlocked = mainElem.getElementsByClassName('btn ready block')
+        
+          lockedBtn(btn[0], 'blacklighGreen', btnBlocked[0])
+  
           // inf.ready = true
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
@@ -174,6 +184,12 @@ async function onPageLoaded() {
           return 
         }
         changeStatus(readyKey, false)
+
+        const btn = mainElem.getElementsByClassName('btn ready blacklighGreen')
+        const btnBlocked = mainElem.getElementsByClassName('btn ready block')
+
+        lockedBtn(btn[0], 'blacklighGreen', btnBlocked[0])
+
         applyAnreadyStyle(notesText, headingText, noteBlock)
         mainElem.classList.remove('status-ready')
 
@@ -256,8 +272,6 @@ async function onPageLoaded() {
         //   throw new Error('ERR_editNote')
         // } 
   
-        console.log('[status]', status, typeof status)
-      
         saveChanges(editedId, {
         // await saveChanges(editedId, {
           heading: headingNote.value,
@@ -265,9 +279,10 @@ async function onPageLoaded() {
           ready: status,
           id: editedId
         })
-  
-        console.log('[status]', getStatus(btn))
-        console.log('[btn]', btn)
+
+        const btnBlocked = btnEdit.getElementsByClassName('icon')
+        
+        lockedBtn(btnEdit, 'blacklighYelow', btnBlocked[0])
 
 
         // saveInLocalStorage(editedNoteId, JSON.stringify({
