@@ -16,6 +16,9 @@ import {
   lockedBtn
 } from './lockedBtn.js'
 
+import {
+  unlockedBtn
+} from './unlockedBtn.js'
 
 import {
   applyReadyStyle,
@@ -45,19 +48,7 @@ async function onPageLoaded() {
 
     function createBtn(div, mainElem, name, blacklight, cb) {
       const btn = document.createElement('div')
-      btn.classList.add('btn', name)
-      btn.classList.add(blacklight)
-      btn.classList.add('cursor')
-      btn.style.display = 'grid'
-
-      const btnBlocked = document.createElement('div')
-      btnBlocked.classList.add('btn', name, 'block')
-      btnBlocked.style.display = 'none'
-
-      const cssloadСontainer = document.createElement('div')
-      cssloadСontainer.classList.add('cssload-container')
-      const cssloadCrazyArrow = document.createElement('div')
-      cssloadCrazyArrow.classList.add('cssload-crazy-arrow')
+      btn.classList.add('btn', name, blacklight, 'cursor')
 
       const srcSVG = `img/${name}.svg`
       const iconElem = new Image
@@ -66,16 +57,13 @@ async function onPageLoaded() {
       iconElem.setAttribute('alt', `${name}Icon`)
 
       mainElem.appendChild(btn)
-      btn.appendChild(btnBlocked)
       btn.appendChild(iconElem)
-      btnBlocked.appendChild(cssloadСontainer)
-      cssloadСontainer.appendChild(cssloadCrazyArrow)
 
-      btn.onclick = () => {
-        // lockedBtn(btn, blacklight, btnBlocked)
+      iconElem.onclick = (event) => {
         cb(div)
+        event.stopPropagation()
       }
-    }
+    } 
 
     function createId() {
       const maxId = Math.max(...allIdSet)
@@ -88,128 +76,133 @@ async function onPageLoaded() {
     }
 
     function createNote(obj) {
-      // console.log(obj.id)
-      const {
-        heading = headingNote.value,
-        text = newNote.value,
-        ready = false,
-        id = id ? id : createId()
-      } = { ...obj }
+        // console.log(obj.id)
+        const {
+          heading = headingNote.value,
+          text = newNote.value,
+          ready = false,
+          id = id ? id : createId()
+        } = { ...obj }
 
-      const note = document.createElement('div')
-      note.classList.add('note')
-      // const currKey = localKey
-      //   ? `note-${localKey}`
-      //   : createId()
-      note.setAttribute('id', id)
+        const note = document.createElement('div')
+        note.classList.add('note')
+        // const currKey = localKey
+        //   ? `note-${localKey}`
+        //   : createId()
+        note.setAttribute('id', id)
 
-      const noteBlock = document.createElement('div')
-      noteBlock.classList.add('noteBlock')
+        const noteBlock = document.createElement('div')
+        noteBlock.classList.add('noteBlock')
 
-      const btnBlock = document.createElement('div')
-      btnBlock.classList.add('btnBlock')
+        const btnBlock = document.createElement('div')
+        btnBlock.classList.add('btnBlock')
 
-      const headingText = document.createElement('p')
-      headingText.classList.add('headingNote')
-      const notesText = document.createElement('p')
-      notesText.classList.add('notesText')
+        const headingText = document.createElement('p')
+        headingText.classList.add('headingNote')
+        const notesText = document.createElement('p')
+        notesText.classList.add('notesText')
 
-      const newHeading = heading
-      const newText = text
+        const newHeading = heading
+        const newText = text
 
-      if (ready == true) {
-        applyReadyStyle(notesText, headingText, noteBlock)
-      }
-
-      notes.appendChild(note)
-      note.appendChild(noteBlock)
-      noteBlock.appendChild(headingText)
-      noteBlock.appendChild(notesText)
-      note.appendChild(btnBlock)
-      headingText.append(newHeading)
-      notesText.append(newText)
-
-      createBtn(note, btnBlock, 'del', 'blacklighRed', (mainElem) => {
-        const noteId = mainElem.getAttribute('id')
-        const btn = mainElem.getElementsByClassName('btn del blacklighRed')
-        const btnBlocked = mainElem.getElementsByClassName('btn del block')
-
-        deleteNote(noteId)        
-        lockedBtn(btn[0], 'blacklighRed', btnBlocked[0])
-
-        // const deletedKey = mainElem.getAttribute('id')
-        // const id = deletedKey.slice(5)
-        // localStorage.removeItem(id)
-        mainElem.remove()
-      })
-
-      createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
-        const editNote = mainElem.querySelector('.notesText')
-        const editHeading = mainElem.querySelector('.headingNote')
-        newNote.value = editNote.textContent
-        headingNote.value = editHeading.textContent
-
-        const btnEdit = document.getElementById('editArea') //TODO: функция
-        btnEdit.style.display = 'block'
-        const btnAdd = document.getElementById('addArea')
-        btnAdd.style.display = 'none'
-
-        editedId = mainElem.getAttribute('id')
-        // editedNoteId = editedId.slice(5)
-      });
-
-      createBtn(note, btnBlock, 'ready', 'blacklighGreen', (mainElem) => {
-        const readyKey = mainElem.getAttribute('id')
-        
-        // const key = readyKey.slice(5)
-        // const inf = getInfFromLS(key)
-        const gray = 'rgb(131, 130, 133)'
-
-        if (notesText.style.backgroundColor !== gray) {
+        if (ready == true) {
           applyReadyStyle(notesText, headingText, noteBlock)
-          mainElem.classList.add('status-ready')
+        }
 
-          changeStatus(readyKey, true)
+        notes.appendChild(note)
+        note.appendChild(noteBlock)
+        noteBlock.appendChild(headingText)
+        noteBlock.appendChild(notesText)
+        note.appendChild(btnBlock)
+        headingText.append(newHeading)
+        notesText.append(newText)
+
+        createBtn(note, btnBlock, 'del', 'blacklighRed', async (mainElem) => {
+          const noteId = mainElem.getAttribute('id')
+          const btn = mainElem.getElementsByClassName('btn del blacklighRed')
+
+          lockedBtn(btn[0], 'blacklighRed')
+
+          const resStatus = await deleteNote(noteId) 
           
-          const btn = mainElem.getElementsByClassName('btn ready blacklighGreen')
-          const btnBlocked = mainElem.getElementsByClassName('btn ready block')
-        
-          lockedBtn(btn[0], 'blacklighGreen', btnBlocked[0])
-  
-          // inf.ready = true
+          unlockedBtn(btn[0], 'blacklighRed')
+
+          console.log('[resStatus]:', resStatus)
+
+          // const deletedKey = mainElem.getAttribute('id')
+          // const id = deletedKey.slice(5)
+          // localStorage.removeItem(id)
+          mainElem.remove()
+        })
+
+        createBtn(note, btnBlock, 'edit', 'blacklighYelow', (mainElem) => {
+          const editNote = mainElem.querySelector('.notesText')
+          const editHeading = mainElem.querySelector('.headingNote')
+          newNote.value = editNote.textContent
+          headingNote.value = editHeading.textContent
+
+          const btnEdit = document.getElementById('editArea') //TODO: функция
+          btnEdit.style.display = 'block'
+          const btnAdd = document.getElementById('addArea')
+          btnAdd.style.display = 'none'
+
+          editedId = mainElem.getAttribute('id')
+          // editedNoteId = editedId.slice(5)
+        });
+
+        createBtn(note, btnBlock, 'ready', 'blacklighGreen', async (mainElem) => {
+          const readyKey = mainElem.getAttribute('id')
+          
+          // const key = readyKey.slice(5)
+          // const inf = getInfFromLS(key)
+          const gray = 'rgb(131, 130, 133)'
+
+          if (notesText.style.backgroundColor !== gray) {
+            applyReadyStyle(notesText, headingText, noteBlock)
+            mainElem.classList.add('status-ready')
+            const btn = mainElem.getElementsByClassName('btn ready')
+          
+            lockedBtn(btn[0], 'blacklighGreen')
+
+            await changeStatus(readyKey, true)
+            
+            unlockedBtn(btn[0], 'blacklighGreen')
+
+            // inf.ready = true
+            // const infJSON = addToJSON(inf)
+            // saveInLocalStorage(key, infJSON)
+            clear()
+            headingNote.focus()
+            return 
+          }
+
+          const btn = mainElem.getElementsByClassName('btn ready')
+
+          lockedBtn(btn[0], 'blacklighGreen')
+
+          await changeStatus(readyKey, false)
+
+          unlockedBtn(btn[0], 'blacklighGreen')
+
+          applyAnreadyStyle(notesText, headingText, noteBlock)
+          mainElem.classList.remove('status-ready')
+
+          // inf.ready = false
           // const infJSON = addToJSON(inf)
           // saveInLocalStorage(key, infJSON)
+
           clear()
           headingNote.focus()
-          return 
-        }
-        changeStatus(readyKey, false)
+        })
 
-        const btn = mainElem.getElementsByClassName('btn ready blacklighGreen')
-        const btnBlocked = mainElem.getElementsByClassName('btn ready block')
+        // const noteInJSON = addToJSON({
+        //   heading,
+        //   text,
+        //   ready
+        // });
 
-        lockedBtn(btn[0], 'blacklighGreen', btnBlocked[0])
-
-        applyAnreadyStyle(notesText, headingText, noteBlock)
-        mainElem.classList.remove('status-ready')
-
-
-        // inf.ready = false
-        // const infJSON = addToJSON(inf)
-        // saveInLocalStorage(key, infJSON)
-
-        clear()
-        headingNote.focus()
-      })
-
-      // const noteInJSON = addToJSON({
-      //   heading,
-      //   text,
-      //   ready
-      // });
-
-      // const id = note.getAttribute('id')
-      // const noteId = id.slice(5)
+        // const id = note.getAttribute('id')
+        // const noteId = id.slice(5)
 
       // saveInLocalStorage(noteId, noteInJSON)
 
@@ -234,8 +227,8 @@ async function onPageLoaded() {
       }
     }
 
-    // async function editNote() {
-    function editNote() {
+    async function editNote() {
+    // function editNote() {
       try {
         const btnEdit = document.getElementById('editArea')
         btnEdit.style.display = 'none'
@@ -272,18 +265,17 @@ async function onPageLoaded() {
         //   throw new Error('ERR_editNote')
         // } 
   
-        saveChanges(editedId, {
-        // await saveChanges(editedId, {
+        lockedBtn(btnEdit, 'blackligh')
+
+        // saveChanges(editedId, {
+        await saveChanges(editedId, {
           heading: headingNote.value,
           text: newNote.value,
           ready: status,
           id: editedId
         })
 
-        const btnBlocked = btnEdit.getElementsByClassName('icon')
-        
-        lockedBtn(btnEdit, 'blacklighYelow', btnBlocked[0])
-
+        unlockedBtn(btnEdit, 'blackligh')
 
         // saveInLocalStorage(editedNoteId, JSON.stringify({
         //   heading: headingNote.value,
