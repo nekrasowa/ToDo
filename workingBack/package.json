@@ -4,13 +4,18 @@
   "description": "",
   "main": "back.js",
   "scripts": {
-    "start": "node nodeTestPromise.js"
+    "start": "node nodeTestPromise.js",
+    "dev": "webpack"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "mongodb": "^4.4.1"
+    "mongodb": "^4.4.1",
+    "webpack": "^5.70.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.2"
   }
 }
