@@ -1,21 +1,16 @@
 {
-  "name": "xyj",
+  "name": "test",
   "version": "1.0.0",
   "description": "",
   "main": "back.js",
   "scripts": {
-    "start": "node nodeTestPromise.js",
-    "dev": "webpack"
+    "start": "node nodeTestPromise.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "mongodb": "^4.4.1",
-    "webpack": "^5.70.0"
-  },
-  "devDependencies": {
-    "webpack-cli": "^4.9.2"
+    "mongodb": "^4.4.1"
   }
 }
