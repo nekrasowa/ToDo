@@ -5,6 +5,14 @@ const {
   addShinobiTown
 } = require('./shinobiArray.js')
 
+function consoleL(text) {
+  console.log(`${text}`)
+}
+function err() {
+  throw new Error("Ошибка!")
+  
+}
+
 const Naruto = {
   'name': { 'first': 'Naruto', 'klan': 'Udsumaki' },
   'rank': 'genin',
@@ -48,26 +56,53 @@ async function run() {
       await client.connect()
       const db = await client.db(dbName)
       console.log('Connected correctly to server')
-      const col = db.collection('shinobi')
+      // const col = db.collection('shinobi')
+
       // await col.createIndex({element: 1, power: 1})
       // const indexes = await col.indexes()
       // console.log('[indexes]:', indexes)
 
-      await col.find({element: 'earth', power: 30})
-        .toArray(function(err, results){
-        console.log(results)
-        console.log(results.length)
-      })
-      // console.log('end');
+      const transactionOptions = {
+        readConcern: { level: 'snapshot' },
+        writeConcern: { w: 'majority' },
+        readPreference: 'primary'
+      };
 
+      const session = client.startSession();
+      
+      
+      
+      // const sessionCol = client.col
+
+      try {
+        session.startTransaction(transactionOptions);
+
+        const sessionCol = client.db(dbName).collection('shinobi')
+
+        await sessionCol.deleteMany({name: {$gt: 500}}, { session })
+        // err()
+        await session.commitTransaction();
+        console.log('first end')
+
+      } catch (err){
+        console.log(err)
+        session.abortTransaction()
+        // throw error;
+      } finally {
+        await session.endSession();
+        // consoleL('uncommit')
+      }
+      
   } catch (err) {
-      console.log(err.stack)
+      // console.log(err.stack)
+      console.log('err')
   }
-  // finally {
-  //   console.log('end');
-  // }
+  finally {
+    await client.close();
+  }
 }
 run().catch(console.dir)
+
 
 // and or and
 // если первый енд не срабатывает будет ли работать дальше другие
