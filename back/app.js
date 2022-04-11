@@ -4,59 +4,81 @@ const app = express()
 const port = 4000
 const getElemByID = require("./getElemByID")
 
-const oldNotesArr = [
-  {
-    heading: 'Первая', 
-    text: 'и текст', 
-    ready: true,
-    id: 'note-0' 
-  },
-  {
-    heading: 'Вторая', 
-    text: 'И ее текст', 
-    ready: false,
-    id: 'note-1'
-  }
-]
+const resFromDB = require('./dataBases/resFromDB.js')
+// const oldNotesArr = [
+//   {
+//     heading: 'Первая', 
+//     text: 'и текст', 
+//     ready: true,
+//     id: 'note-0' 
+//   },
+//   {
+//     heading: 'Вторая', 
+//     text: 'И ее текст', 
+//     ready: false,
+//     id: 'note-1'
+//   }
+// ]
 
 app.use(cors())
 app.use(express.json())
 
-app.get('/', function(req, res) {
-  res.json(oldNotesArr)
+app.get('/notes/get', async function(req, res) {
+    try {
+      const allNotes = await resFromDB.addArrOfOldNotes()
+      const allId = await resFromDB.getAllId()
+      const responseArr = [allNotes, allId]
+      res.json(responseArr)
+    } catch (err) {
+      console.log(err)
+      // TODO сообщить об ошибке
+    }
 })
 
-app.post('/add', function(req, res) {
+app.post('/notes/add', async function(req, res) {
   try {
-    oldNotesArr.push(req.body)
+    const newNote = await resFromDB.addNewNote(req.body)
+    // console.log('[newNote]', newNote)
 
-    res.json({ isOk: true })
+    if (newNote === true) {
+      return res.json({ isOk: true })
+    }
+  
+    return res.json({ isOk: false })
+  
   } catch (err) {
     res.status(500)
     res.json({ isOk: false })
   }
 })
 
-app.delete('/delete', function(req, res) {
+app.delete('/notes/delete', async function(req, res) {
   try {
-    const indexOfDeletedNote = getElemByID(oldNotesArr, req.body.noteId)
+    // const indexOfDeletedNote = getElemByID(oldNotesArr, req.body.noteId)
 
-    if (indexOfDeletedNote === -1) {
-      res.status(400)
-      res.json({ isOk: false })
+    // if (indexOfDeletedNote === -1) {
+    //   res.status(400)
+    //   res.json({ isOk: false })
 
-      return
+    //   return
+    // }
+
+    // oldNotesArr.splice(indexOfDeletedNote, 1)
+
+    const deletedNote = await resFromDB.deleteElById(req.body.noteId)
+    if (deletedNote) {
+      return res.json({ isOk: true })
     }
 
-    oldNotesArr.splice(indexOfDeletedNote, 1)
-    res.json({ isOk: true })
+    return res.json({ isOk: false })
+
   } catch (err) {
     res.status(500)
     res.json({ isOk: false })
   }
 })
 
-app.put('/changeStatus', function(req, res) {
+app.put('/notes/changeStatus', function(req, res) {
   try {
     const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
 
@@ -140,4 +162,10 @@ app.put('/saveChanges', function(req, res) {
 
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
+})
+
+app.use((req, res) => {
+  res
+    .status(404)
+    .sendFile(createPath('error'))
 })
