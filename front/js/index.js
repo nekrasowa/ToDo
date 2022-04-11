@@ -8,6 +8,7 @@ import {
   // getStatus
 } from './request.js'
 
+
 // import {
 //   getNotesFromLS
 // } from './function.js'
@@ -30,16 +31,21 @@ const headingNote = document.querySelector('.headingInput')
 async function onPageLoaded() {
   try {
     // const oldNotes = getNotesFromLS()
-    const oldNotesArr = await addArrOfOldNotes()
+    const allNotesandIdArr = await addArrOfOldNotes()
+    console.log('[oldNotesArr_ARR]', allNotesandIdArr[0])
+    console.log('[oldNotesArr_ID]', allNotesandIdArr[1])
+
+    const allNotes = allNotesandIdArr[0]
+    const allId = allNotesandIdArr[1]
 
     const newNote = document.querySelector('.newNoteArea')
     const notes = document.querySelector('.notes')
-    const allIdSet = new Set([1]) 
+    const allIdSet = new Set(allId) 
     // TODO: изменить число на -1, когда не будет массива на сервере
     // let editedNoteId
     let editedId
 
-    oldNotesArr.forEach(createNote)
+    allNotes.forEach(createNote)
 
     function clear() {
       document.querySelector('.headingInput').value = ''
@@ -67,22 +73,36 @@ async function onPageLoaded() {
 
     function createId() {
       const maxId = Math.max(...allIdSet)
-
-      console.log(allIdSet)
       const noteId = maxId + 1
       allIdSet.add(noteId)
 
       return `note-${noteId}`
     }
 
-    function createNote(obj) {
-        // console.log(obj.id)
+    async function createNote(obj) {
+        console.log('[Obj]', obj)
         const {
           heading = headingNote.value,
           text = newNote.value,
           ready = false,
           id = id ? id : createId()
         } = { ...obj }
+
+        if (!obj) {
+          const objOfNote = {
+            heading,
+            text,
+            ready,
+            id
+          }
+          const resaltOfAdded = await addNewNote(objOfNote)
+          console.log('[resaltOfAdded]', resaltOfAdded)
+  
+          if (resaltOfAdded === { isOk: false }) {
+            return console.log('Ошибка на сервере. Попробуйте снова')
+          }
+          //TODO
+        } 
 
         const note = document.createElement('div')
         note.classList.add('note')
@@ -124,10 +144,10 @@ async function onPageLoaded() {
           lockedBtn(btn[0], 'blacklighRed')
 
           const resStatus = await deleteNote(noteId) 
-          
-          unlockedBtn(btn[0], 'blacklighRed')
 
-          console.log('[resStatus]:', resStatus)
+          const unblBtn = mainElem.getElementsByClassName('btn del cursor')
+
+          unlockedBtn(unblBtn[0], 'blacklighRed')
 
           // const deletedKey = mainElem.getAttribute('id')
           // const id = deletedKey.slice(5)
@@ -209,26 +229,9 @@ async function onPageLoaded() {
       clear()
       headingNote.focus()
       notes.scrollTop = notes.scrollHeight
-
-      if (!obj) {
-        const objOfNote = {
-          heading,
-          text,
-          ready,
-          id
-          // heading = newHeading,
-          // text = newText,
-          // ready: false 
-        }
-        // const JSONobjOfNote = JSON.stringify(objOfNote)
-        addNewNote(objOfNote)
-        // console.log(JSONobjOfNote)
-
-      }
     }
 
     async function editNote() {
-    // function editNote() {
       try {
         const btnEdit = document.getElementById('editArea')
         btnEdit.style.display = 'none'

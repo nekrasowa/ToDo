@@ -1,7 +1,4 @@
 export function unlockedBtn(btn, blacklight) {
-  console.log('[unlockedBtn]')
-  console.log('[unlockedBtn  btn]', btn)
-  
   const deletedDiv = btn.getElementsByClassName('btnBlocked')
   deletedDiv[0].remove()
 

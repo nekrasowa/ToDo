@@ -16,10 +16,11 @@ export function lockedBtn(btn, blacklight) {
   btnBlocked.appendChild(cssloadСontainer)
   cssloadСontainer.appendChild(cssloadCrazyArrow)
 
-  btn.classList.remove(blacklight)
-
+  if (blacklight) {
+    btn.classList.remove(blacklight)
+  }
   // btn.onclick = null
-  console.log('[lockedBtn  btn]', btn)
+  console.log('[lockedBtn btn]', btn)
 
   const blockedBtn = document.querySelectorAll('.btn')
 

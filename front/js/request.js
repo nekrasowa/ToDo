@@ -1,14 +1,15 @@
 'use strict'
 
 const url = new URL('http://localhost:4000')
-const addURL = new URL('/add', url)
-const deleteURL = new URL('/delete', url)
-const statusURL = new URL('/changeStatus', url)
+const getURL = new URL('/notes/get', url)
+const addURL = new URL('/notes/add', url)
+const deleteURL = new URL('/notes/delete', url)
+const statusURL = new URL('/notes/changeStatus', url)
 // const getStatusURL = new URL('/getStatus', url)
-const changesURL = new URL('/saveChanges', url)
+const changesURL = new URL('/notes/saveChanges', url)
 
 export function addArrOfOldNotes() {
-  return fetch(url)
+  return fetch(getURL)
     .then((response) => response.json())
 }
 
