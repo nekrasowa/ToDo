@@ -1,0 +1,79 @@
+.menuContanier {
+  border: solid;
+  margin: 13.5% 33% 0 31%;
+
+  display: grid;
+  grid-template-rows: 3fr 2fr 1fr 1fr 1fr 3fr; 
+  grid-template-columns: 1fr;
+  /* grid-template-areas
+                     ;  */
+  height: 50vh;
+  position: relative;
+  background-color: dimgrey;
+}
+
+.registerContanier {
+  border: solid;
+  margin: 13.5% 33% 0 31%;
+
+  display: grid;
+  grid-template-rows: 3fr 4fr 1fr 3fr; 
+  grid-template-columns: 1fr;
+  /* grid-template-areas
+                     ;  */
+  height: 50vh;
+  position: relative;
+  background-color: dimgrey;
+}
+
+.formField {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr; 
+  grid-template-columns: 5fr 3fr;
+  margin: 3%;
+}
+
+.welcomeMassage {
+  font-size: 2em;
+  font-family: fantasy;
+  color: rgb(112, 4, 4);
+}
+
+#second{
+  font-size: 1.5em;
+  margin: 10% 0 0 0 ;
+  color: rgb(75, 14, 14);
+}
+
+p {
+  margin: 5% 0 0 0 ;
+  text-align: center;
+}
+
+p.log, p.pass, p.email {
+  font-size: 1.2em;
+  text-align: left;
+  padding-left: 10%;
+}
+
+.registerLink {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.btn {
+  height: 1em;
+  width: 3em;
+  background-color: rgb(166 112 112);
+  border: 1px solid;
+  border-color: rgb(33 33 33);
+  color: rgb(0, 0, 0);
+  font-size: 1em;
+  text-align: center;
+  margin: 5% auto 0;
+  cursor: pointer;
+}
+
+input {
+  height: 1.1em;
+}

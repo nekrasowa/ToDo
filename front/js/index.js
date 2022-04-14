@@ -270,7 +270,6 @@ async function onPageLoaded() {
   
         lockedBtn(btnEdit, 'blackligh')
 
-        // saveChanges(editedId, {
         await saveChanges(editedId, {
           heading: headingNote.value,
           text: newNote.value,
