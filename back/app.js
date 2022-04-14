@@ -5,20 +5,7 @@ const port = 4000
 const getElemByID = require("./getElemByID")
 
 const resFromDB = require('./dataBases/resFromDB.js')
-// const oldNotesArr = [
-//   {
-//     heading: 'Первая', 
-//     text: 'и текст', 
-//     ready: true,
-//     id: 'note-0' 
-//   },
-//   {
-//     heading: 'Вторая', 
-//     text: 'И ее текст', 
-//     ready: false,
-//     id: 'note-1'
-//   }
-// ]
+const mongoUsers = require('./dataBases/mongoUsers.js')
 
 app.use(cors())
 app.use(express.json())
@@ -78,18 +65,39 @@ app.delete('/notes/delete', async function(req, res) {
   }
 })
 
-app.put('/notes/changeStatus', function(req, res) {
+app.put('/notes/changeStatus', async function(req, res) {
   try {
-    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+    const changeNoteId = req.body.noteId
+    const changeNoteStatus = req.body.status
 
-    if (indexOfChangedNote === -1) {
-      res.status(400)
-      res.json({ isOk: false })
+    const changedNote = await resFromDB.changeStatus(changeNoteId, changeNoteStatus)
 
-      return
+    if (changedNote) {
+      return res.json({ isOk: true })
     }
-    
-    oldNotesArr[indexOfChangedNote].ready = req.body.status
+
+    return res.json({ isOk: false })
+  } catch (err) {
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
+app.put('/notes/saveChanges', async function(req, res) {
+  try {
+    const changeNoteId = req.body.noteId
+    const changeNoteobj = req.body.obj
+    console.log('[changeNoteId]:', changeNoteId)
+    console.log('[changeNoteobj]:', changeNoteobj)
+
+    const newNote = await resFromDB.changeNote(changeNoteId, changeNoteobj)
+    console.log('[newNote]:', newNote)
+
+    if (newNote) {
+      return res.json({ isOk: true })
+    }
+
+    return res.json({ isOk: false })
 
     res.json({ isOk: true })
   } catch (err) {
@@ -98,67 +106,66 @@ app.put('/notes/changeStatus', function(req, res) {
   }
 })
 
-// app.get('/getStatus', function(req, res) {
-//   try {
-//     console.log("noteId", req.query.noteId)
-//     const indexOfChangedNote = getElemByID(oldNotesArr, req.query.noteId)
-    
-//     if (indexOfChangedNote === -1) {
-//       res.status(400)
-//       res.json({ isOk: false })
-
-//       return
-//     }
-
-//     console.log('[indexOfChangedNote]', indexOfChangedNote)
-//     console.log('[oldNotesArr]', oldNotesArr)
-
-//     const status = oldNotesArr[indexOfChangedNote].ready
-//     console.log('[status]', status, typeof status)
-    
-//     res.json({ status, isOk: true })
-//   } catch (err) {
-//     res.status(500)
-//     res.json({ isOk: false })
-//   }
-// })
-
-// app.put('/getStatus', function(req, res) {
-//   try {
-    
-//     const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
-
-//     const status = oldNotesArr[indexOfChangedNote].ready
-//     console.log('[oldNotesArr]', oldNotesArr)
-    
-//     res.json( {status: status} )
-//   } catch (err) {
-//     res.status(500)
-//     res.json({ isOk: false })
-//   }
-// })
+///////////////////////////
+///////////////////////////
 
 
-app.put('/saveChanges', function(req, res) {
+app.get('/users/get', async function(req, res) {
+  console.log('[connectGet]')
+  console.log('[req.query]', req.query)
+  
   try {
-    const indexOfChangedNote = getElemByID(oldNotesArr, req.body.noteId)
+    const [userExist, id] = await mongoUsers.checkForUser(req.query)
+    console.log('[userExist]:', userExist)
 
-    if (indexOfChangedNote === -1) {
-      res.status(400)
-      res.json({ isOk: false })
-
-      return
+    if (userExist == true) {
+      const exist = true
+      const massage = 'This user exists yet! Login please'
+      const url = 'identifPage.html'
+      const status = { isOk: true }
+      return res.json([exist, massage, url, status, id])
     }
-    
-    oldNotesArr[indexOfChangedNote] = req.body.obj
-    console.log('[oldNotesArr[indexOfChangedNote]', req.body.obj)
-    
-    res.json({ isOk: true })
+
+    const exist = false
+    const massage = 'We add new user, wait please!'
+    const url = ''
+    const status = { isOk: true }
+    console.log('[return]:')
+
+    return res.json([exist, massage, url, status])
   } catch (err) {
+    console.log(err)
     res.status(500)
     res.json({ isOk: false })
   }
 })
+
+app.post('/users/post', async function(req, res) {
+  console.log('[connectPost]')
+
+  try {
+    const [statusAdd, id] = await mongoUsers.addUser(req.body)
+    
+    if (statusAdd == true) {
+      const massage = 'New User is added! Login with your passord!'
+      const url = 'identifPage.html'
+      const status = { isOk: true }
+      return res.json([massage, url, status, id])
+    }
+
+    const massage = 'New User is not added! Try again!'
+    const url = 'identifPage.html'
+    const status = { isOk: true }
+    
+    return res.json([massage, url, status, id])
+    
+  } catch (err) {
+    console.log(err)
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
 
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
@@ -168,4 +175,9 @@ app.use((req, res) => {
   res
     .status(404)
     .sendFile(createPath('error'))
+})
+
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 })

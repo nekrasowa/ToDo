@@ -98,9 +98,56 @@ async function addNewNote(JSONobjOfNote) {
   }
 }
 
+async function changeStatus(NoteId, status) {
+  try {
+    await client.connect()
+
+    console.log('[connect]:')
+
+    const db = client.db(dbName)
+    const notesCol = db.collection('notes')
+    const changedNote = await notesCol.findOne({ id: NoteId });
+    console.log('[changedNote]:', changedNote)
+    const changedStatus = await notesCol.updateOne(changedNote, {$set: { ready: status }});
+    console.log('[changedStatus]:', changedStatus)
+
+    await client.close()
+    return changedStatus.acknowledged
+
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
+async function changeNote(noteId, obj) {
+  try {
+    await client.connect()
+
+    console.log('[connect changeNote]:')
+    console.log('[obj]:', obj)
+
+    const db = client.db(dbName)
+    const notesCol = db.collection('notes')
+    const neededNote = await notesCol.findOne({ id: noteId });
+    console.log('[neededNote]:', neededNote)
+    const newNote = await notesCol.updateOne(neededNote, {$set: obj });
+    console.log('[changedStatus]:', newNote)
+
+    await client.close()
+    return newNote.acknowledged
+
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
 module.exports = {
   addArrOfOldNotes,
   getAllId,
   deleteElById,
-  addNewNote
+  addNewNote,
+  changeStatus,
+  changeNote
 }
