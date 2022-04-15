@@ -19,7 +19,13 @@ async function identifUser() {
   const userFromDB = await findUser(identifiableUser)
   console.log('[userFromDB]', userFromDB)
 
-  
+  const [exist, massage, url, status, id] = userFromDB
+
+  const notesPageUrl = '../../index.html'
+
+  setTimeout(() => {
+      window.location.href = notesPageUrl
+    }, 2 * 1000)
   return console.log('Congratulation!!!')
 }
 
