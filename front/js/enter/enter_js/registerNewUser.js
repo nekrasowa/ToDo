@@ -22,7 +22,13 @@ async function registerNewUser() {
     return new Error('Problem on server, try later!')
   }
   if (exist == true) {
-    return [new Error(massage1), url1]
+    console.log(new Error(massage1))
+
+    // setTimeout(() => {
+    //   window.location.href = url1;
+    // }, 2 * 1000)
+
+    return 
   }
 
   console.log(massage1)
@@ -37,15 +43,15 @@ async function registerNewUser() {
 
   console.log(massage2)
 
-  setTimeout(() => {
-    window.location.href = url2;
-  }, 2 * 1000)
+  // setTimeout(() => {
+  //   window.location.href = url2;
+  // }, 2 * 1000)
 
   
   return console.log('Congratulation!!!')
 }
 
-function findUser(userInfo) {
+export function findUser(userInfo) {
   const serialize = function(obj) {
     var str = [];
     for (var p in obj)
