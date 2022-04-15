@@ -14,6 +14,7 @@ app.get('/users/get', async function(req, res) {
   
   try {
     const [userExist, id] = await checkForUser(req.query)
+    console.log('[id]', id)
 
     if (userExist == true) {
       const exist = true

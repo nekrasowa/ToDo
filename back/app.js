@@ -87,8 +87,6 @@ app.put('/notes/saveChanges', async function(req, res) {
   try {
     const changeNoteId = req.body.noteId
     const changeNoteobj = req.body.obj
-    console.log('[changeNoteId]:', changeNoteId)
-    console.log('[changeNoteobj]:', changeNoteobj)
 
     const newNote = await resFromDB.changeNote(changeNoteId, changeNoteobj)
     console.log('[newNote]:', newNote)
@@ -96,8 +94,6 @@ app.put('/notes/saveChanges', async function(req, res) {
     if (newNote) {
       return res.json({ isOk: true })
     }
-
-    return res.json({ isOk: false })
 
     res.json({ isOk: true })
   } catch (err) {
@@ -165,6 +161,14 @@ app.post('/users/post', async function(req, res) {
     res.json({ isOk: false })
   }
 })
+
+/////////////////////////
+/////////////////////////
+
+
+
+
+
 
 
 app.listen(port, function() {

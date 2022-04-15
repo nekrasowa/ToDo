@@ -15,16 +15,20 @@ async function checkForUser(userObj) {
 
     const userEmail = await usersCol.findOne({ email: email })
 
-    if (!userEmail === null) {
+    if (userEmail !== null) {
       await client.close()
       return [ true, userEmail.insertedId ]
     }
 
-    const userName = await usersCol.findOne({ name: name })
+    const userName = await usersCol.findOne(
+      { name: name,
+        password: password
+      }
+       )
     
-    if (!userName === null) {
+    if (userName !== null) {
       await client.close()
-      return [ true, userName.insertedId ]
+      return [ true, userName._id ]
     }
 
     await client.close()
@@ -40,7 +44,6 @@ async function checkForUser(userObj) {
 
 async function addUser(userObj) {
   console.log('[connectMongoAdd]')
-  console.log('[userObj]:', typeof userObj)
 
   try {
     await client.connect()
@@ -48,6 +51,7 @@ async function addUser(userObj) {
 
     const db = await client.db(dbName)
     const usersCol = await db.collection('users')
+
     const newUser = await usersCol.insertOne(userObj) 
 
     return [ newUser.acknowledged, newUser.insertedId ]
