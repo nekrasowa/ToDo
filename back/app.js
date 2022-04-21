@@ -6,6 +6,8 @@ const getElemByID = require("./getElemByID")
 
 const resFromDB = require('./dataBases/resFromDB.js')
 const mongoUsers = require('./dataBases/mongoUsers.js')
+const cookieParser = require('cookie-parser')
+
 
 app.use(cors())
 app.use(express.json())
@@ -41,17 +43,6 @@ app.post('/notes/add', async function(req, res) {
 
 app.delete('/notes/delete', async function(req, res) {
   try {
-    // const indexOfDeletedNote = getElemByID(oldNotesArr, req.body.noteId)
-
-    // if (indexOfDeletedNote === -1) {
-    //   res.status(400)
-    //   res.json({ isOk: false })
-
-    //   return
-    // }
-
-    // oldNotesArr.splice(indexOfDeletedNote, 1)
-
     const deletedNote = await resFromDB.deleteElById(req.body.noteId)
     if (deletedNote) {
       return res.json({ isOk: true })
@@ -111,7 +102,7 @@ app.get('/users/get', async function(req, res) {
   console.log('[req.query]', req.query)
   
   try {
-    const [userExist, id] = await mongoUsers.checkForUser(req.query)
+    const [userExist, id] = await mongoUsers.checkForRegistr(req.query)
     console.log('[userExist]:', userExist)
 
     if (userExist == true) {
@@ -126,9 +117,38 @@ app.get('/users/get', async function(req, res) {
     const massage = 'We add new user, wait please!'
     const url = ''
     const status = { isOk: true }
-    console.log('[return]:')
+    console.log('[returnF]:')
 
     return res.json([exist, massage, url, status])
+  } catch (err) {
+    console.log(err)
+    res.status(500)
+    res.json({ isOk: false })
+  }
+})
+
+app.get('/users/get/check', async function(req, res) {
+  console.log('[connectCheck]')
+  console.log('[req.query]', req.query)
+  
+  try {
+    const [identifStatus, massage, authToken] = await mongoUsers.checkForIdentif(req.query)
+    console.log('[identifStatus]:', identifStatus)
+
+    if (identifStatus == true) {
+      console.log(massage)
+
+      const statusServ = { isOk: true }
+
+      res.cookie('AuthToken', authToken)
+      return res.json([statusServ.isOk, identifStatus])
+
+    }
+    console.log(massage)
+    const status = { isOk: true }
+    console.log('[returnF]:')
+
+    return res.json([status, identifStatus])
   } catch (err) {
     console.log(err)
     res.status(500)
@@ -179,6 +199,17 @@ app.use((req, res) => {
   res
     .status(404)
     .sendFile(createPath('error'))
+})
+
+app.use(async (req, res, next) => {
+
+  console.log('[req.cookies]', req.cookies)
+
+  const authToken = req.cookies['AuthToken']
+
+  req.user = await getToken(authToken)
+
+  next()
 })
 
 app.use(function(err, req, res, next) {
