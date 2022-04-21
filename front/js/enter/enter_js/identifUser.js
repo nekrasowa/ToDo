@@ -1,8 +1,24 @@
 'use strict'
 
-import {
-  findUser
-} from './registerNewUser.js'
+// import {
+//   findUser
+// } from './registerNewUser.js'
+
+const serialize = function(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
+
+function checkUser(userInfo) {
+  const userInfoStr = serialize(userInfo)
+  
+  return fetch(`http://localhost:4000/users/get/check?${userInfoStr}`)
+    .then((response) => response.json())
+}
 
 async function identifUser() {
   console.log('[connectStartIdent]')
@@ -11,24 +27,32 @@ async function identifUser() {
   const password = document.querySelector('.password')
 
   const identifiableUser = {
-    name: login.value,
+    email: login.value,
     password: password.value
   }
+
+  // const userInfoStr = serialize(identifiableUser)
+  const protectedURL = 'file:///Users/codecare/projects/ludochka/ToDo/front/index.html'
+
   console.log('[User]', identifiableUser)
 
-  const userFromDB = await findUser(identifiableUser)
-  console.log('[userFromDB]', userFromDB)
+  const [statusServ, identifStatus] = await checkUser(identifiableUser)
 
-  const [exist, massage, url, status, id] = userFromDB
+  if (statusServ === false) {
+    console.log('An error has occurred, please try again.')
+    return
+  }
 
-  const notesPageUrl = '../../index.html'
-
+  if (identifStatus === false) {
+    console.log('Invalid username or password, check the data or register.')
+    return
+  }
   setTimeout(() => {
-      window.location.href = notesPageUrl
-    }, 2 * 1000)
+      window.location.href = protectedURL
+    }, 5 * 1000)
+
   return console.log('Congratulation!!!')
 }
-
 
 const enter = document.getElementsByClassName('btn');
 enter[0].onclick = identifUser;

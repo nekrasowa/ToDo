@@ -24,9 +24,9 @@ async function registerNewUser() {
   if (exist == true) {
     console.log(new Error(massage1))
 
-    // setTimeout(() => {
-    //   window.location.href = url1;
-    // }, 2 * 1000)
+    setTimeout(() => {
+      window.location.href = url1;
+    }, 2 * 1000)
 
     return 
   }
@@ -43,15 +43,15 @@ async function registerNewUser() {
 
   console.log(massage2)
 
-  // setTimeout(() => {
-  //   window.location.href = url2;
-  // }, 2 * 1000)
+  setTimeout(() => {
+    window.location.href = url2;
+  }, 2 * 1000)
 
   
   return console.log('Congratulation!!!')
 }
 
-export function findUser(userInfo) {
+function findUser(userInfo) {
   const serialize = function(obj) {
     var str = [];
     for (var p in obj)
@@ -79,5 +79,7 @@ function addNewUser(userInfo) {
 }
 
 
-const enter = document.getElementsByClassName('btn');
-enter[0].onclick = registerNewUser;
+const enter = document.getElementsByClassName('btn')
+enter[0].onclick = registerNewUser
+
+// export { findUser }
