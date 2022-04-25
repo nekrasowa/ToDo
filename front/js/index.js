@@ -30,8 +30,10 @@ const headingNote = document.querySelector('.headingInput')
 
 async function onPageLoaded() {
   try {
+    const userToken = localStorage.getItem('accessToken')
+    const servUser = localStorage.getItem('servUser')
     // const oldNotes = getNotesFromLS()
-    const allNotesandIdArr = await addArrOfOldNotes()
+    const allNotesandIdArr = await addArrOfOldNotes(userToken)
     console.log('[oldNotesArr_ARR]', allNotesandIdArr[0])
     console.log('[oldNotesArr_ID]', allNotesandIdArr[1])
 
@@ -85,7 +87,8 @@ async function onPageLoaded() {
           heading = headingNote.value,
           text = newNote.value,
           ready = false,
-          id = id ? id : createId()
+          id = id ? id : createId(),
+          user = servUser
         } = { ...obj }
 
         if (!obj) {
@@ -93,9 +96,10 @@ async function onPageLoaded() {
             heading,
             text,
             ready,
-            id
+            id,
+            user
           }
-          const resaltOfAdded = await addNewNote(objOfNote)
+          const resaltOfAdded = await addNewNote(objOfNote, userToken)
           console.log('[resaltOfAdded]', resaltOfAdded)
   
           if (resaltOfAdded === { isOk: false }) {
@@ -143,7 +147,7 @@ async function onPageLoaded() {
 
           lockedBtn(btn[0], 'blacklighRed')
 
-          const resStatus = await deleteNote(noteId) 
+          const resStatus = await deleteNote(noteId, userToken) 
 
           const unblBtn = mainElem.getElementsByClassName('btn del cursor')
 
@@ -184,7 +188,7 @@ async function onPageLoaded() {
           
             lockedBtn(btn[0], 'blacklighGreen')
 
-            await changeStatus(readyKey, true)
+            await changeStatus(readyKey, true, userToken)
             
             unlockedBtn(btn[0], 'blacklighGreen')
 
@@ -200,7 +204,7 @@ async function onPageLoaded() {
 
           lockedBtn(btn[0], 'blacklighGreen')
 
-          await changeStatus(readyKey, false)
+          await changeStatus(readyKey, false, userToken)
 
           unlockedBtn(btn[0], 'blacklighGreen')
 
@@ -275,7 +279,7 @@ async function onPageLoaded() {
           text: newNote.value,
           ready: status,
           id: editedId
-        })
+        }, userToken)
 
         unlockedBtn(btnEdit, 'blackligh')
 

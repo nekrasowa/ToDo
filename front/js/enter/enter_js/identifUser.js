@@ -36,7 +36,7 @@ async function identifUser() {
 
   console.log('[User]', identifiableUser)
 
-  const [statusServ, identifStatus] = await checkUser(identifiableUser)
+  const [statusServ, identifStatus, accessToken] = await checkUser(identifiableUser)
 
   if (statusServ === false) {
     console.log('An error has occurred, please try again.')
@@ -47,6 +47,10 @@ async function identifUser() {
     console.log('Invalid username or password, check the data or register.')
     return
   }
+
+  localStorage.setItem('accessToken', accessToken)
+  localStorage.setItem('servUser', login.value)
+
   setTimeout(() => {
       window.location.href = protectedURL
     }, 5 * 1000)
