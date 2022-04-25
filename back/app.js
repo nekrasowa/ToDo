@@ -7,14 +7,54 @@ const getElemByID = require("./getElemByID")
 const resFromDB = require('./dataBases/resFromDB.js')
 const mongoUsers = require('./dataBases/mongoUsers.js')
 const cookieParser = require('cookie-parser')
-
+const jwt = require('jsonwebtoken')
+const bodyParser = require('body-parser')
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 
-app.get('/notes/get', async function(req, res) {
+const accessTokenSecret = 'zk.,k.zjq69'
+
+
+// app.use(async (req, res, next) => {
+
+//   console.log('[req.cookies]', req.cookies)
+
+//   const authToken = req.cookies['AuthToken']
+
+//   req.user = await mongoUsers.getToken(authToken)
+
+//   console.log('[req.user]', req.user)
+
+//   next()
+// })
+
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+      const token = authHeader.split(' ')[1];
+
+      jwt.verify(token, accessTokenSecret, (err, user) => {
+          if (err) {
+              return res.sendStatus(403)
+          }
+          console.log('[req]', req.body)
+
+          req.user = user
+          console.log('[req]', req.user)
+
+          next()
+      });
+  } else {
+      res.sendStatus(401)
+  }
+};
+
+app.get('/notes/get', authenticateJWT, async function(req, res) {
     try {
-      const allNotes = await resFromDB.addArrOfOldNotes()
+      const allNotes = await resFromDB.addArrOfOldNotes(req.user.email)
       const allId = await resFromDB.getAllId()
       const responseArr = [allNotes, allId]
       res.json(responseArr)
@@ -24,10 +64,10 @@ app.get('/notes/get', async function(req, res) {
     }
 })
 
-app.post('/notes/add', async function(req, res) {
+app.post('/notes/add', authenticateJWT, async function(req, res) {
   try {
     const newNote = await resFromDB.addNewNote(req.body)
-    // console.log('[newNote]', newNote)
+    console.log('[newNote]', newNote)
 
     if (newNote === true) {
       return res.json({ isOk: true })
@@ -41,7 +81,7 @@ app.post('/notes/add', async function(req, res) {
   }
 })
 
-app.delete('/notes/delete', async function(req, res) {
+app.delete('/notes/delete', authenticateJWT, async function(req, res) {
   try {
     const deletedNote = await resFromDB.deleteElById(req.body.noteId)
     if (deletedNote) {
@@ -56,7 +96,7 @@ app.delete('/notes/delete', async function(req, res) {
   }
 })
 
-app.put('/notes/changeStatus', async function(req, res) {
+app.put('/notes/changeStatus', authenticateJWT, async function(req, res) {
   try {
     const changeNoteId = req.body.noteId
     const changeNoteStatus = req.body.status
@@ -74,7 +114,7 @@ app.put('/notes/changeStatus', async function(req, res) {
   }
 })
 
-app.put('/notes/saveChanges', async function(req, res) {
+app.put('/notes/saveChanges', authenticateJWT, async function(req, res) {
   try {
     const changeNoteId = req.body.noteId
     const changeNoteobj = req.body.obj
@@ -95,7 +135,6 @@ app.put('/notes/saveChanges', async function(req, res) {
 
 ///////////////////////////
 ///////////////////////////
-
 
 app.get('/users/get', async function(req, res) {
   console.log('[connectGet]')
@@ -136,19 +175,21 @@ app.get('/users/get/check', async function(req, res) {
     console.log('[identifStatus]:', identifStatus)
 
     if (identifStatus == true) {
+      const {email, password} = req.query
+      const accessToken = jwt.sign({ email: email,  exp: Math.floor(new Date().getTime()/1000) + 7*24*60*60 }, accessTokenSecret)
+
       console.log(massage)
 
       const statusServ = { isOk: true }
 
       res.cookie('AuthToken', authToken)
-      return res.json([statusServ.isOk, identifStatus])
-
+      return res.json([ statusServ.isOk, identifStatus, accessToken ])
     }
     console.log(massage)
     const status = { isOk: true }
     console.log('[returnF]:')
 
-    return res.json([status, identifStatus])
+    return res.json([status, identifStatus, null])
   } catch (err) {
     console.log(err)
     res.status(500)
@@ -186,11 +227,6 @@ app.post('/users/post', async function(req, res) {
 /////////////////////////
 
 
-
-
-
-
-
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
 })
@@ -201,16 +237,7 @@ app.use((req, res) => {
     .sendFile(createPath('error'))
 })
 
-app.use(async (req, res, next) => {
 
-  console.log('[req.cookies]', req.cookies)
-
-  const authToken = req.cookies['AuthToken']
-
-  req.user = await getToken(authToken)
-
-  next()
-})
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);

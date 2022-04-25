@@ -3,14 +3,14 @@ const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const dbName = 'ToDo'
 
-async function addArrOfOldNotes() {
+async function addArrOfOldNotes(user) {
   try {
     await client.connect()
     console.log('[connect]:')
 
     const db = await client.db(dbName)
     const notesCol = await db.collection('notes')
-    const cursor = await notesCol.find({})
+    const cursor = await notesCol.find({ user: user })
     const allNotes = await cursor.toArray()
 
     await client.close()
