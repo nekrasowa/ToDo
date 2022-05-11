@@ -1,0 +1,1 @@
+/Applications/Postgres.app/Contents/Versions/14/bin/postgres "-D" "/Users/codecare/projects/ludochka/ToDo/ToDoSQL/SQL" "-p" "5435"

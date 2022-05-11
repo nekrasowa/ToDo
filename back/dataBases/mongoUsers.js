@@ -146,9 +146,8 @@ async function getToken(token) {
   }
 } 
 
-module.exports = {
-  checkForRegistr,
-  checkForIdentif,
-  addUser,
-  getToken
-}
+// module.exports = {
+//   checkForRegistr,
+//   checkForIdentif,
+//   addUser,
+//   getToken

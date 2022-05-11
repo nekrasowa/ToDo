@@ -1,0 +1,38 @@
+2022-04-28 15:23:45.627 EEST [72654] LOG:  starting PostgreSQL 14.2 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-04-28 15:23:45.631 EEST [72654] LOG:  listening on IPv6 address "::1", port 5435
+2022-04-28 15:23:45.631 EEST [72654] LOG:  listening on IPv4 address "127.0.0.1", port 5435
+2022-04-28 15:23:45.637 EEST [72654] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5435"
+2022-04-28 15:23:45.646 EEST [72655] LOG:  database system was shut down at 2022-04-28 15:23:44 EEST
+2022-04-28 15:23:45.658 EEST [72654] LOG:  database system is ready to accept connections
+2022-04-28 15:26:17.160 EEST [72743] FATAL:  role "Lucy" does not exist
+2022-04-28 15:41:21.104 EEST [73240] FATAL:  role "Lucy" does not exist
+2022-04-28 16:01:53.520 EEST [73834] FATAL:  database "ToDoSQL" does not exist
+2022-04-28 16:03:26.331 EEST [72654] LOG:  received fast shutdown request
+2022-04-28 16:03:26.333 EEST [72654] LOG:  aborting any active transactions
+2022-04-28 16:03:26.530 EEST [72654] LOG:  background worker "logical replication launcher" (PID 72661) exited with exit code 1
+2022-04-28 16:03:26.531 EEST [72656] LOG:  shutting down
+2022-04-28 16:03:26.553 EEST [72654] LOG:  database system is shut down
+2022-04-28 16:03:31.232 EEST [73874] LOG:  starting PostgreSQL 14.2 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-04-28 16:03:31.235 EEST [73874] LOG:  listening on IPv6 address "::1", port 5435
+2022-04-28 16:03:31.235 EEST [73874] LOG:  listening on IPv4 address "127.0.0.1", port 5435
+2022-04-28 16:03:31.237 EEST [73874] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5435"
+2022-04-28 16:03:31.248 EEST [73875] LOG:  database system was shut down at 2022-04-28 16:03:26 EEST
+2022-04-28 16:03:31.284 EEST [73874] LOG:  database system is ready to accept connections
+2022-04-28 16:03:57.468 EEST [73911] FATAL:  database "todosql" does not exist
+2022-04-28 16:10:33.070 EEST [74013] FATAL:  database "todosql" does not exist
+2022-04-28 16:16:58.156 EEST [73874] LOG:  received fast shutdown request
+2022-04-28 16:16:58.158 EEST [73874] LOG:  aborting any active transactions
+2022-04-28 16:16:58.160 EEST [73874] LOG:  background worker "logical replication launcher" (PID 73881) exited with exit code 1
+2022-04-28 16:16:58.160 EEST [73876] LOG:  shutting down
+2022-04-28 16:16:58.182 EEST [73874] LOG:  database system is shut down
+2022-04-28 16:16:59.630 EEST [74442] LOG:  starting PostgreSQL 14.2 on aarch64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2022-04-28 16:16:59.634 EEST [74442] LOG:  listening on IPv6 address "::1", port 5435
+2022-04-28 16:16:59.634 EEST [74442] LOG:  listening on IPv4 address "127.0.0.1", port 5435
+2022-04-28 16:16:59.637 EEST [74442] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5435"
+2022-04-28 16:16:59.658 EEST [74443] LOG:  database system was shut down at 2022-04-28 16:16:58 EEST
+2022-04-28 16:16:59.676 EEST [74442] LOG:  database system is ready to accept connections
+2022-04-28 16:18:15.939 EEST [74442] LOG:  received fast shutdown request
+2022-04-28 16:18:15.941 EEST [74442] LOG:  aborting any active transactions
+2022-04-28 16:18:15.943 EEST [74442] LOG:  background worker "logical replication launcher" (PID 74449) exited with exit code 1
+2022-04-28 16:18:15.944 EEST [74444] LOG:  shutting down
+2022-04-28 16:18:15.961 EEST [74442] LOG:  database system is shut down

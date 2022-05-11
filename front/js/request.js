@@ -9,11 +9,12 @@ const statusURL = new URL('/notes/changeStatus', url)
 const changesURL = new URL('/notes/saveChanges', url)
 
 export function addArrOfOldNotes(token) {
+  console.log('[token]',token )
   return fetch(getURL, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     }
   })
@@ -28,7 +29,7 @@ export function addNewNote(JSONobjOfNote, token) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(JSONobjOfNote), 
+    body: JSON.stringify(JSONobjOfNote)
   })
   .then((response) => response.json())
 }

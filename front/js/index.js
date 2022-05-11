@@ -31,7 +31,7 @@ const headingNote = document.querySelector('.headingInput')
 async function onPageLoaded() {
   try {
     const userToken = localStorage.getItem('accessToken')
-    const servUser = localStorage.getItem('servUser')
+    const servUser = localStorage.getItem('accessToken')
     // const oldNotes = getNotesFromLS()
     const allNotesandIdArr = await addArrOfOldNotes(userToken)
     console.log('[oldNotesArr_ARR]', allNotesandIdArr[0])
@@ -43,8 +43,7 @@ async function onPageLoaded() {
     const newNote = document.querySelector('.newNoteArea')
     const notes = document.querySelector('.notes')
     const allIdSet = new Set(allId) 
-    // TODO: изменить число на -1, когда не будет массива на сервере
-    // let editedNoteId
+  
     let editedId
 
     allNotes.forEach(createNote)
@@ -74,11 +73,16 @@ async function onPageLoaded() {
     } 
 
     function createId() {
-      const maxId = Math.max(...allIdSet)
-      const noteId = maxId + 1
-      allIdSet.add(noteId)
+      const maxId = Math.max(-1, ...allIdSet)
 
-      return `note-${noteId}`
+      const noteId = maxId + 1
+      console.log('[noteId]:', noteId)
+
+      allIdSet.add(noteId)
+      console.log('[allIdSet]:', allIdSet)
+
+      console.log('[id]:', noteId)
+      return noteId
     }
 
     async function createNote(obj) {
@@ -88,6 +92,7 @@ async function onPageLoaded() {
           text = newNote.value,
           ready = false,
           id = id ? id : createId(),
+          // id,
           user = servUser
         } = { ...obj }
 
@@ -96,23 +101,30 @@ async function onPageLoaded() {
             heading,
             text,
             ready,
-            id,
             user
           }
-          const resaltOfAdded = await addNewNote(objOfNote, userToken)
+          console.log('[objOfNote]:', objOfNote)
+
+          const resalt = await addNewNote(objOfNote, userToken)
           console.log('[resaltOfAdded]', resaltOfAdded)
-  
-          if (resaltOfAdded === { isOk: false }) {
+          
+          const [resaltOfAdded, idAddedNote] = resalt
+          console.log('[idAddedNote]', idAddedNote.id )
+
+          const idOfNewNote = idAddedNote.id
+          // objOfNote = obj.newNote
+          console.log('[objOfNote]:', objOfNote)
+
+          if (resaltOfAdded.isOk == false ) {
             return console.log('Ошибка на сервере. Попробуйте снова')
           }
           //TODO
         } 
 
+        // console.log('id', idOfNewNote)
         const note = document.createElement('div')
         note.classList.add('note')
-        // const currKey = localKey
-        //   ? `note-${localKey}`
-        //   : createId()
+        
         note.setAttribute('id', id)
 
         const noteBlock = document.createElement('div')
@@ -143,6 +155,7 @@ async function onPageLoaded() {
 
         createBtn(note, btnBlock, 'del', 'blacklighRed', async (mainElem) => {
           const noteId = mainElem.getAttribute('id')
+          console.log('[noteID]:', noteId)
           const btn = mainElem.getElementsByClassName('btn del blacklighRed')
 
           lockedBtn(btn[0], 'blacklighRed')
@@ -171,6 +184,7 @@ async function onPageLoaded() {
           btnAdd.style.display = 'none'
 
           editedId = mainElem.getAttribute('id')
+          console.log('[editedId]]', editedId)
           // editedNoteId = editedId.slice(5)
         });
 
@@ -263,14 +277,6 @@ async function onPageLoaded() {
           return false
         }
         const status = getStatus(btn)
-        // const {
-        //   status,
-        //   isOk
-        // } = await getStatus(editedId)
-
-        // if (!isOk) {
-        //   throw new Error('ERR_editNote')
-        // } 
   
         lockedBtn(btnEdit, 'blackligh')
 
@@ -283,12 +289,6 @@ async function onPageLoaded() {
 
         unlockedBtn(btnEdit, 'blackligh')
 
-        // saveInLocalStorage(editedNoteId, JSON.stringify({
-        //   heading: headingNote.value,
-        //   text: newNote.value,
-        //   ready: false
-        // }))
-  
         clear();
   
         headingNote.focus();

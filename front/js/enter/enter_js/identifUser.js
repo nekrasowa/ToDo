@@ -32,7 +32,7 @@ async function identifUser() {
   }
 
   // const userInfoStr = serialize(identifiableUser)
-  const protectedURL = 'file:///Users/codecare/projects/ludochka/ToDo/front/index.html'
+  const protectedURL = 'file:///Users/codecare/projects/ludochka/ToDo/ToDoSQL/front/index.html'
 
   console.log('[User]', identifiableUser)
 
@@ -47,7 +47,7 @@ async function identifUser() {
     console.log('Invalid username or password, check the data or register.')
     return
   }
-
+  console.log('[accessToken]', accessToken)
   localStorage.setItem('accessToken', accessToken)
   localStorage.setItem('servUser', login.value)
 

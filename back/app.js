@@ -4,31 +4,18 @@ const app = express()
 const port = 4000
 const getElemByID = require("./getElemByID")
 
-const resFromDB = require('./dataBases/resFromDB.js')
-const mongoUsers = require('./dataBases/mongoUsers.js')
+const resFromDB = require('./dataBases/postgreSQL')
+// const SQLUsers = require('./dataBases/SQLUsers.js')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 
 const accessTokenSecret = 'zk.,k.zjq69'
-
-
-// app.use(async (req, res, next) => {
-
-//   console.log('[req.cookies]', req.cookies)
-
-//   const authToken = req.cookies['AuthToken']
-
-//   req.user = await mongoUsers.getToken(authToken)
-
-//   console.log('[req.user]', req.user)
-
-//   next()
-// })
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -52,10 +39,12 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.get('/notes/get', authenticateJWT, async function(req, res) {
+// app.get('/notes/get', async function(req, res) {
+  app.get('/notes/get', authenticateJWT, async function(req, res) {
     try {
-      const allNotes = await resFromDB.addArrOfOldNotes(req.user.email)
-      const allId = await resFromDB.getAllId()
+      const token = req.headers.authorization.replace('Bearer ', '')
+      const allNotes = await resFromDB.addArrOfOldNotes(token)
+      const allId = await resFromDB.getAllId(token)
       const responseArr = [allNotes, allId]
       res.json(responseArr)
     } catch (err) {
@@ -64,13 +53,17 @@ app.get('/notes/get', authenticateJWT, async function(req, res) {
     }
 })
 
-app.post('/notes/add', authenticateJWT, async function(req, res) {
+// app.post('/notes/add', async function(req, res) {
+  app.post('/notes/add', authenticateJWT, async function(req, res) {
   try {
-    const newNote = await resFromDB.addNewNote(req.body)
-    console.log('[newNote]', newNote)
+    console.log('[req.bodyADD]', req.body)
 
-    if (newNote === true) {
-      return res.json({ isOk: true })
+    const newNote = await resFromDB.addNewNote(req.body)
+
+    console.log('[newNoteREQ]', newNote.id)
+
+    if (newNote !== null) {
+      return res.json([{ isOk: true }, {id: newNote.id}])
     }
   
     return res.json({ isOk: false })
@@ -81,7 +74,8 @@ app.post('/notes/add', authenticateJWT, async function(req, res) {
   }
 })
 
-app.delete('/notes/delete', authenticateJWT, async function(req, res) {
+// app.delete('/notes/delete', async function(req, res) {
+  app.delete('/notes/delete', authenticateJWT, async function(req, res) {
   try {
     const deletedNote = await resFromDB.deleteElById(req.body.noteId)
     if (deletedNote) {
@@ -96,7 +90,8 @@ app.delete('/notes/delete', authenticateJWT, async function(req, res) {
   }
 })
 
-app.put('/notes/changeStatus', authenticateJWT, async function(req, res) {
+// app.put('/notes/changeStatus', async function(req, res) {
+  app.put('/notes/changeStatus', authenticateJWT, async function(req, res) {
   try {
     const changeNoteId = req.body.noteId
     const changeNoteStatus = req.body.status
@@ -114,7 +109,8 @@ app.put('/notes/changeStatus', authenticateJWT, async function(req, res) {
   }
 })
 
-app.put('/notes/saveChanges', authenticateJWT, async function(req, res) {
+// app.put('/notes/saveChanges', async function(req, res) {
+  app.put('/notes/saveChanges', authenticateJWT, async function(req, res) {
   try {
     const changeNoteId = req.body.noteId
     const changeNoteobj = req.body.obj
@@ -136,56 +132,29 @@ app.put('/notes/saveChanges', authenticateJWT, async function(req, res) {
 ///////////////////////////
 ///////////////////////////
 
-app.get('/users/get', async function(req, res) {
-  console.log('[connectGet]')
-  console.log('[req.query]', req.query)
-  
-  try {
-    const [userExist, id] = await mongoUsers.checkForRegistr(req.query)
-    console.log('[userExist]:', userExist)
-
-    if (userExist == true) {
-      const exist = true
-      const massage = 'This user exists yet! Login please'
-      const url = 'identifPage.html'
-      const status = { isOk: true }
-      return res.json([exist, massage, url, status, id])
-    }
-
-    const exist = false
-    const massage = 'We add new user, wait please!'
-    const url = ''
-    const status = { isOk: true }
-    console.log('[returnF]:')
-
-    return res.json([exist, massage, url, status])
-  } catch (err) {
-    console.log(err)
-    res.status(500)
-    res.json({ isOk: false })
-  }
-})
-
 app.get('/users/get/check', async function(req, res) {
   console.log('[connectCheck]')
   console.log('[req.query]', req.query)
   
   try {
-    const [identifStatus, massage, authToken] = await mongoUsers.checkForIdentif(req.query)
+    const user = await resFromDB.checkForIdentif(req.query)
+
+    const [ identifStatus, massage, token ] = user
     console.log('[identifStatus]:', identifStatus)
 
-    if (identifStatus == true) {
+    if (identifStatus === true) {
       const {email, password} = req.query
       const accessToken = jwt.sign({ email: email,  exp: Math.floor(new Date().getTime()/1000) + 7*24*60*60 }, accessTokenSecret)
 
       console.log(massage)
 
       const statusServ = { isOk: true }
+      console.log('[accessToken]', accessToken)
 
-      res.cookie('AuthToken', authToken)
+      // res.cookie('AuthToken', authToken)
       return res.json([ statusServ.isOk, identifStatus, accessToken ])
     }
-    console.log(massage)
+    console.log(massage.massage)
     const status = { isOk: true }
     console.log('[returnF]:')
 
@@ -201,20 +170,21 @@ app.post('/users/post', async function(req, res) {
   console.log('[connectPost]')
 
   try {
-    const [statusAdd, id] = await mongoUsers.addUser(req.body)
+    const statusAdd = await resFromDB.addUser(req.body)
+    console.log('[statusAdd]', statusAdd)
     
-    if (statusAdd == true) {
+    if (statusAdd === true) {
       const massage = 'New User is added! Login with your passord!'
       const url = 'identifPage.html'
       const status = { isOk: true }
-      return res.json([massage, url, status, id])
+      return res.json([massage, url, status, statusAdd])
     }
 
     const massage = 'New User is not added! Try again!'
-    const url = 'identifPage.html'
+    const url = 'registerPage.html'
     const status = { isOk: true }
     
-    return res.json([massage, url, status, id])
+    return res.json([massage, url, status, statusAdd])
     
   } catch (err) {
     console.log(err)
@@ -231,11 +201,18 @@ app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`)
 })
 
-app.use((req, res) => {
-  res
-    .status(404)
-    .sendFile(createPath('error'))
-})
+app.use(function(req, res, next) {
+  res.status(404)
+
+  // respond with json
+  if (req.accepts('json')) {
+    res.json({ error: 'Not found' })
+    return
+  }
+
+  // default to plain-text. send()
+  res.type('txt').send('Not found')
+});
 
 
 
